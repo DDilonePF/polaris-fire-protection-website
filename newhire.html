@@ -47,6 +47,9 @@
     .nav-buttons .btn { min-width:140px; }
     .final-success { text-align:center; padding:3rem 2rem; }
     .final-success .icon-wrap { display:inline-flex; align-items:center; justify-content:center; width:60px; height:60px; border-radius:50%; background:#ecfdf5; color:#059669; margin:0 auto 1.5rem; }
+    .employer-block { background:var(--c-bg-alt); border:1px solid var(--c-border); border-radius:6px; padding:1.5rem; margin-bottom:1rem; }
+    .employer-block h4 { font-size:.78rem; font-weight:700; color:var(--c-text-muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:1rem; }
+    .field-full { grid-column:1 / -1; }
   </style>
 </head>
 <body>
@@ -73,17 +76,110 @@
       <div class="container onboard-wrap">
 
         <div class="onboard-progress" id="progressBar">
-          <div class="step-pill active" data-step="0"><span class="num">1</span> Employee Info</div>
-          <div class="step-pill" data-step="1"><span class="num">2</span> Confidential</div>
-          <div class="step-pill" data-step="2"><span class="num">3</span> Work Rules</div>
-          <div class="step-pill" data-step="3"><span class="num">4</span> Fall Protection</div>
-          <div class="step-pill" data-step="4"><span class="num">5</span> W-4 &amp; I-9</div>
+          <div class="step-pill active" data-step="0"><span class="num">1</span> Application</div>
+          <div class="step-pill" data-step="1"><span class="num">2</span> Employee Info</div>
+          <div class="step-pill" data-step="2"><span class="num">3</span> Confidential</div>
+          <div class="step-pill" data-step="3"><span class="num">4</span> Work Rules</div>
+          <div class="step-pill" data-step="4"><span class="num">5</span> Fall Protection</div>
+          <div class="step-pill" data-step="5"><span class="num">6</span> W-4 &amp; I-9</div>
         </div>
 
         <form id="onboardForm" novalidate>
 
-          <!-- STEP 1: New Employee Information -->
+          <!-- STEP 1: Employment Application -->
           <div class="form-step visible" data-step="0">
+            <div class="onboard-card">
+              <h2 class="step-title">Employment Application</h2>
+              <p class="step-desc">Complete the application below. Fields marked with <span style="color:var(--c-red);">*</span> are required.</p>
+
+              <p class="form-section-title">Position Information</p>
+              <div class="form-row">
+                <div class="field"><label>Position Applying For <span class="req">*</span></label><input name="app_position" required placeholder="e.g. Fire Sprinkler Installer"></div>
+                <div class="field"><label>Date Available <span class="req">*</span></label><input name="app_dateAvailable" type="date" required></div>
+              </div>
+              <div class="field"><label>Employment Type <span class="req">*</span></label>
+                <div class="radio-group"><label><input type="radio" name="app_empType" value="Full-Time" required> Full-Time</label><label><input type="radio" name="app_empType" value="Part-Time"> Part-Time</label></div>
+              </div>
+              <div class="field"><label>Department <span class="req">*</span></label>
+                <div class="radio-group"><label><input type="radio" name="app_dept" value="Field" required> Field</label><label><input type="radio" name="app_dept" value="Administrative"> Administrative</label><label><input type="radio" name="app_dept" value="Engineering/PM"> Engineering / PM</label></div>
+              </div>
+
+              <p class="form-section-title">Personal Information</p>
+              <div class="form-grid-3">
+                <div class="field"><label>Last Name <span class="req">*</span></label><input name="app_lastName" required></div>
+                <div class="field"><label>First Name <span class="req">*</span></label><input name="app_firstName" required></div>
+                <div class="field"><label>Middle Name</label><input name="app_middleName"></div>
+              </div>
+              <div class="field" style="margin-top:1.125rem"><label>Street Address <span class="req">*</span></label><input name="app_address" required placeholder="Street address, Apt #"></div>
+              <div class="form-grid-3" style="margin-top:1.125rem">
+                <div class="field"><label>City <span class="req">*</span></label><input name="app_city" required></div>
+                <div class="field"><label>State <span class="req">*</span></label><input name="app_state" required></div>
+                <div class="field"><label>Zip Code <span class="req">*</span></label><input name="app_zip" required></div>
+              </div>
+              <div class="form-row" style="margin-top:1.125rem">
+                <div class="field"><label>Phone <span class="req">*</span></label><input name="app_phone" type="tel" required placeholder="(954) 000-0000"></div>
+                <div class="field"><label>Email <span class="req">*</span></label><input name="app_email" type="email" required placeholder="you@example.com"></div>
+              </div>
+              <div class="field" style="margin-top:1.125rem"><label>Authorized to work in the United States? <span class="req">*</span></label>
+                <div class="radio-group"><label><input type="radio" name="app_workAuth" value="Yes" required> Yes</label><label><input type="radio" name="app_workAuth" value="No"> No</label></div>
+              </div>
+
+              <p class="form-section-title">Education</p>
+              <div class="form-row">
+                <div class="field"><label>Highest Level of Education</label>
+                  <select name="app_education"><option value="">Select...</option><option>High School / GED</option><option>Some College</option><option>Associate's Degree</option><option>Bachelor's Degree</option><option>Graduate Degree</option><option>Vocational / Trade School</option></select>
+                </div>
+                <div class="field"><label>School Name</label><input name="app_schoolName" placeholder="Name of school"></div>
+              </div>
+
+              <p class="form-section-title">Employment History</p>
+              <div class="field"><label>Previously worked for Polaris Fire Protection?</label>
+                <div class="radio-group"><label><input type="radio" name="app_prevPolaris" value="Yes"> Yes</label><label><input type="radio" name="app_prevPolaris" value="No"> No</label></div>
+              </div>
+              <div class="employer-block">
+                <h4>Most Recent Employer</h4>
+                <div class="form-row">
+                  <div class="field"><label>Employer Name</label><input name="app_emp1_name" placeholder="Company name"></div>
+                  <div class="field"><label>Your Title</label><input name="app_emp1_title" placeholder="Job title"></div>
+                </div>
+                <div class="form-row">
+                  <div class="field"><label>Start Date</label><input name="app_emp1_start" placeholder="MM/YYYY"></div>
+                  <div class="field"><label>End Date</label><input name="app_emp1_end" placeholder="MM/YYYY or Present"></div>
+                </div>
+                <div class="field"><label>Duties and Reason for Leaving</label><textarea name="app_emp1_duties" rows="2" placeholder="Brief description of your role and why you left"></textarea></div>
+              </div>
+              <div class="employer-block">
+                <h4>Previous Employer</h4>
+                <div class="form-row">
+                  <div class="field"><label>Employer Name</label><input name="app_emp2_name" placeholder="Company name"></div>
+                  <div class="field"><label>Your Title</label><input name="app_emp2_title" placeholder="Job title"></div>
+                </div>
+                <div class="form-row">
+                  <div class="field"><label>Start Date</label><input name="app_emp2_start" placeholder="MM/YYYY"></div>
+                  <div class="field"><label>End Date</label><input name="app_emp2_end" placeholder="MM/YYYY"></div>
+                </div>
+                <div class="field"><label>Duties and Reason for Leaving</label><textarea name="app_emp2_duties" rows="2" placeholder="Brief description of your role and why you left"></textarea></div>
+              </div>
+
+              <p class="form-section-title">Certifications &amp; Licenses</p>
+              <div class="field"><label>List any relevant licenses, certifications, or NICET levels</label><textarea name="app_certifications" rows="3" placeholder="e.g. NICET Level II, Backflow Certification, Florida Driver's License Class E, OSHA 30..."></textarea></div>
+
+              <p class="form-section-title">Additional Information</p>
+              <div class="field"><label>Anything else you'd like us to know?</label><textarea name="app_notes" rows="3" placeholder="Availability details, referral source, etc."></textarea></div>
+
+              <p class="form-section-title">Certification</p>
+              <div class="field">
+                <label style="display:flex;align-items:flex-start;gap:.5rem;font-weight:400;font-size:.85rem;color:var(--c-text-muted);cursor:pointer;">
+                  <input type="checkbox" name="app_certify" required style="width:auto;margin-top:3px;accent-color:var(--c-red);">
+                  I certify that the information provided in this application is true and complete to the best of my knowledge. <span class="req">*</span>
+                </label>
+              </div>
+              <div class="nav-buttons"><div></div><button type="button" class="btn btn-primary next-btn">Continue &rarr;</button></div>
+            </div>
+          </div>
+
+          <!-- STEP 2: New Employee Information -->
+          <div class="form-step" data-step="1">
             <div class="onboard-card">
               <h2 class="step-title">New Employee Information Sheet</h2>
               <p class="step-desc">Personal details, direct deposit, and emergency contact information.</p>
@@ -143,8 +239,8 @@
             </div>
           </div>
 
-          <!-- STEP 2: Confidential Information -->
-          <div class="form-step" data-step="1">
+          <!-- STEP 3: Confidential Information -->
+          <div class="form-step" data-step="2">
             <div class="onboard-card">
               <h2 class="step-title">Confidential Information Sheet</h2>
               <p class="step-desc">This information is voluntary and kept separate from employment records. Used for government compliance only.</p>
@@ -188,8 +284,8 @@
             </div>
           </div>
 
-          <!-- STEP 3: Work Rules -->
-          <div class="form-step" data-step="2">
+          <!-- STEP 4: Work Rules -->
+          <div class="form-step" data-step="3">
             <div class="onboard-card">
               <h2 class="step-title">Work Rules</h2>
               <p class="step-desc">Please read all 30 work rules below, then acknowledge at the bottom.</p>
@@ -238,8 +334,8 @@
             </div>
           </div>
 
-          <!-- STEP 4: Fall Protection -->
-          <div class="form-step" data-step="3">
+          <!-- STEP 5: Fall Protection -->
+          <div class="form-step" data-step="4">
             <div class="onboard-card">
               <h2 class="step-title">Fall Protection Training Checklist</h2>
               <p class="step-desc">Confirm each item below regarding your fall protection training.</p>
@@ -259,8 +355,8 @@
             </div>
           </div>
 
-          <!-- STEP 5: W-4 & I-9 -->
-          <div class="form-step" data-step="4">
+          <!-- STEP 6: W-4 & I-9 -->
+          <div class="form-step" data-step="5">
             <div class="onboard-card">
               <h2 class="step-title">W-4 and I-9 Forms</h2>
               <p class="step-desc">Federal law requires these government forms. Click below to open each one. HR will assist you with completing them.</p>
@@ -430,7 +526,56 @@
           doc.setTextColor(34, 34, 34);
         }
 
-        // ===== PAGE 1: Employee Information =====
+        // ===== PAGE 1: Employment Application =====
+        pageHeader('EMPLOYMENT APPLICATION');
+
+        header('Position Information');
+        row('Position', d.app_position);
+        row('Date Available', d.app_dateAvailable);
+        row('Employment Type', d.app_empType);
+        row('Department', d.app_dept);
+        y += 3;
+
+        header('Personal Information');
+        row('Name', (d.app_firstName || '') + ' ' + (d.app_middleName || '') + ' ' + (d.app_lastName || ''));
+        row('Address', (d.app_address || '') + ', ' + (d.app_city || '') + ', ' + (d.app_state || '') + ' ' + (d.app_zip || ''));
+        row('Phone', d.app_phone);
+        row('Email', d.app_email);
+        row('Work Authorization', d.app_workAuth);
+        y += 3;
+
+        header('Education');
+        row('Level', d.app_education);
+        row('School', d.app_schoolName);
+        y += 3;
+
+        header('Employment History');
+        row('Previously at Polaris', d.app_prevPolaris);
+        y += 2;
+        row('Employer 1', d.app_emp1_name);
+        row('Title', d.app_emp1_title, true);
+        row('Dates', (d.app_emp1_start || '') + ' to ' + (d.app_emp1_end || ''), true);
+        row('Duties / Reason', d.app_emp1_duties, true);
+        y += 2;
+        row('Employer 2', d.app_emp2_name);
+        row('Title', d.app_emp2_title, true);
+        row('Dates', (d.app_emp2_start || '') + ' to ' + (d.app_emp2_end || ''), true);
+        row('Duties / Reason', d.app_emp2_duties, true);
+        y += 3;
+
+        header('Certifications & Licenses');
+        const certLines = doc.splitTextToSize(d.app_certifications || 'None listed', pw);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+        certLines.forEach(l => { doc.text(l, M, y); y += 5; if (y > 260) { doc.addPage(); y = 18; } });
+        y += 3;
+
+        header('Additional Notes');
+        const noteLines = doc.splitTextToSize(d.app_notes || 'None', pw);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+        noteLines.forEach(l => { doc.text(l, M, y); y += 5; if (y > 260) { doc.addPage(); y = 18; } });
+
+        // ===== PAGE 2: Employee Information =====
+        doc.addPage(); y = 15;
         pageHeader('NEW EMPLOYEE INFORMATION SHEET');
 
         header('Personal Information');
