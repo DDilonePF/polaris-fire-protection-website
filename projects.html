@@ -181,9 +181,9 @@
     const images = Array.from(items).map(i => i.querySelector('img').src);
     let idx = 0;
 
-    items.forEach(item => {
+    items.forEach((item, i) => {
       item.addEventListener('click', () => {
-        idx = parseInt(item.dataset.index);
+        idx = i;
         lightboxImg.src = images[idx];
         lightbox.classList.add('open');
         document.body.style.overflow = 'hidden';
