@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -sk https://www.polarisfp.com/about)",
+      "Bash(python -c ':*)",
+      "WebFetch(domain:lively-plant-00fb15c0f.2.azurestaticapps.net)",
+      "Bash(curl -sL \"https://lively-plant-00fb15c0f.2.azurestaticapps.net/\")",
+      "Bash(curl:*)",
+      "Bash(pip install:*)",
+      "Bash(python:*)",
+      "Bash(az --version)",
+      "Bash(swa:*)",
+      "Bash(npm install:*)",
+      "Bash(az account show:*)",
+      "Bash(az account list:*)",
+      "Bash(cmd.exe /c \"where npm\")",
+      "Bash(cmd.exe:*)",
+      "Bash(\"/c/Program Files/nodejs/npm\" --version)",
+      "Read(//c/Program Files/**)",
+      "Bash(az group create:*)",
+      "Bash(az staticwebapp create:*)",
+      "Bash(pip show:*)",
+      "Bash(az extension list:*)",
+      "Bash(az staticwebapp:*)",
+      "Bash(export PATH=\"/c/Program Files/nodejs:$PATH\")",
+      "Bash(rm -rf /c/temp/polaris-deploy)",
+      "Bash(mkdir -p /c/temp/polaris-deploy)",
+      "Bash(cp -r \"/c/Users/dboog/OneDrive - Polaris Fire Protection/Documents/claude_projects/Website/\"* /c/temp/polaris-deploy/)",
+      "Bash(rm -rf /c/temp/polaris-deploy/.claude)",
+      "Bash(winget:*)",
+      "Bash(export PATH=\"$PATH:/c/Program Files/nodejs\")",
+      "Bash(export PATH=\"$PATH:/c/Program Files/nodejs:/c/Users/dboog/AppData/Roaming/npm\")",
+      "Bash(cp \"/c/Users/dboog/OneDrive - Polaris Fire Protection/Documents/claude_projects/Website/Zip Pics/2026/303 Banyan West Palm Beach.jpg\" \"/c/Users/dboog/OneDrive - Polaris Fire Protection/Documents/claude_projects/Website/images/gallery-17.jpg\")",
+      "Bash(cp \"/c/Users/dboog/OneDrive - Polaris Fire Protection/Documents/claude_projects/Website/Zip Pics/2026/345 Banyan West Palm Beach.jpg\" \"/c/Users/dboog/OneDrive - Polaris Fire Protection/Documents/claude_projects/Website/images/gallery-18.jpg\")",
+      "Bash(cp \"/c/Users/dboog/OneDrive - Polaris Fire Protection/Documents/claude_projects/Website/Zip Pics/2026/350 South Australian West Palm Beach.png\" \"/c/Users/dboog/OneDrive - Polaris Fire Protection/Documents/claude_projects/Website/images/gallery-19.png\")",
+      "Bash(cp \"/c/Users/dboog/OneDrive - Polaris Fire Protection/Documents/claude_projects/Website/Zip Pics/2026/44M Street  Washington DC.PNG\" \"/c/Users/dboog/OneDrive - Polaris Fire Protection/Documents/claude_projects/Website/images/gallery-20.png\")",
+      "Bash(cp \"/c/Users/dboog/OneDrive - Polaris Fire Protection/Documents/claude_projects/Website/Zip Pics/2026/Army Institute of Public Health Aberdeen MD.jpg\" \"/c/Users/dboog/OneDrive - Polaris Fire Protection/Documents/claude_projects/Website/images/gallery-21.jpg\")"
+    ]
+  }
+}

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact | Polaris Fire Protection</title>
+  <meta name="description" content="Contact Polaris Fire Protection. Offices in Plantation FL, West Palm Beach, Tampa Bay, Jacksonville, and Maryland.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container nav-inner">
+      <a href="index.html" class="logo-link">
+        <img src="images/logo.png" alt="Polaris Fire Protection" class="logo-img">
+      </a>
+      <nav class="desktop-nav">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="employment.html">Employment</a></li>
+          <li><a href="contact.html" class="active">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="nav-right">
+        <a href="tel:9546783934" class="phone-link" aria-label="Call us">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.01L6.6 10.8z"/></svg>
+          <span>954-678-3934</span>
+        </a>
+        <a href="contact.html" class="btn btn-primary nav-cta">Get a Quote</a>
+        <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <div class="mobile-nav">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="employment.html">Employment</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+        <li><a href="tel:9546783934" class="mobile-phone">Call: 954-678-3934</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <!-- Page Hero -->
+    <section class="page-hero">
+      <h1>Contact Polaris</h1>
+      <p>Questions, bids, or just want to talk through a project, we're here for it.</p>
+    </section>
+
+    <!-- Contact Form -->
+    <section class="contact-section">
+      <div class="container contact-inner">
+        <div class="contact-header reveal-up">
+          <span class="eyebrow">Reach Out</span>
+          <h2>We'd Like to Hear From You</h2>
+          <p class="contact-body">Need an estimate, have a service question, or exploring a partnership? Send us a message and someone from our team will follow up quickly.</p>
+          <div class="contact-meta">
+            <a href="tel:9546783934" class="meta-link">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.01L6.6 10.8z"/></svg>
+              954-678-3934
+            </a>
+            <span class="meta-sep">&middot;</span>
+            <span class="meta-text">Mon to Fri, 7am to 4pm</span>
+            <span class="meta-sep">&middot;</span>
+            <span class="meta-text">Eastern United States</span>
+          </div>
+        </div>
+        <div class="form-wrap reveal-up" style="--reveal-delay:100ms">
+          <form class="contact-form" novalidate>
+            <div class="form-row">
+              <div class="field">
+                <label for="firstName">First name <span class="req">*</span></label>
+                <input id="firstName" type="text" required placeholder="Jane" autocomplete="given-name">
+              </div>
+              <div class="field">
+                <label for="lastName">Last name <span class="req">*</span></label>
+                <input id="lastName" type="text" required placeholder="Smith" autocomplete="family-name">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="email">Email <span class="req">*</span></label>
+                <input id="email" type="email" required placeholder="jane@company.com" autocomplete="email">
+              </div>
+              <div class="field">
+                <label for="phone">Phone</label>
+                <input id="phone" type="tel" placeholder="(954) 000-0000" autocomplete="tel">
+              </div>
+            </div>
+            <div class="field">
+              <label for="subject">Subject <span class="req">*</span></label>
+              <input id="subject" type="text" required placeholder="How can we help?">
+            </div>
+            <div class="field">
+              <label for="message">Message <span class="req">*</span></label>
+              <textarea id="message" required rows="5" placeholder="Tell us about your project..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary submit-btn">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Locations -->
+    <section class="locations-section" style="background:var(--c-bg);">
+      <div class="container">
+        <div class="locations-header reveal-up">
+          <span class="eyebrow">Our Offices</span>
+          <h2>Polaris Locations</h2>
+        </div>
+        <div class="locations-grid reveal-up" style="--reveal-delay:100ms">
+          <div class="location-card">
+            <h3>Polaris HQ, Ft Lauderdale, FL</h3>
+            <p>
+              4009 SW 7th Street<br>
+              Plantation, FL 33317<br><br>
+              <strong>Alex Romero</strong><br>
+              <a href="mailto:aromero@polarisfp.com">aromero@polarisfp.com</a><br>
+              <a href="tel:9546783934">(954) 678-3934</a>
+            </p>
+          </div>
+          <div class="location-card">
+            <h3>West Palm, FL</h3>
+            <p>
+              1510 Latham Road<br>
+              Unit 7<br>
+              West Palm Beach, FL 33409
+            </p>
+          </div>
+          <div class="location-card">
+            <h3>Tampa, FL</h3>
+            <p>
+              12467 62nd St<br>
+              Unit 104<br>
+              Largo, FL 33773
+            </p>
+          </div>
+          <div class="location-card">
+            <h3>Mid Atlantic</h3>
+            <p>Baltimore, Maryland</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <img src="images/logo.png" alt="Polaris Fire Protection" style="height:42px;width:auto;margin-bottom:1.25rem;">
+        <p class="footer-tagline">Full-service fire sprinkler contractor headquartered in Fort Lauderdale, FL with operations across the Eastern United States.</p>
+        <a href="tel:9546783934" class="footer-phone">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.01L6.6 10.8z"/></svg>
+          954-678-3934
+        </a>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Services</h4>
+        <ul>
+          <li><a href="index.html">Estimating</a></li>
+          <li><a href="index.html">Design &amp; Engineering</a></li>
+          <li><a href="index.html">Service &amp; Repairs</a></li>
+          <li><a href="index.html">New Installations</a></li>
+          <li><a href="index.html">Inspections &amp; Maintenance</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Company</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="projects.html">Project Gallery</a></li>
+          <li><a href="employment.html">Employment</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-heading">Contact</h4>
+        <div class="contact-details">
+          <div class="detail">
+            <span class="detail-label">Phone</span>
+            <a href="tel:9546783934">954-678-3934</a>
+          </div>
+          <div class="detail">
+            <span class="detail-label">Service Area</span>
+            <span>Eastern United States</span>
+          </div>
+          <div class="detail">
+            <span class="detail-label">Hours</span>
+            <span>Mon to Fri, 7am to 4pm</span>
+          </div>
+          <div class="detail">
+            <span class="detail-label">Emergency</span>
+            <span>24/7 Support</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <p>&copy; 2025 Polaris Fire Protection. All rights reserved.</p>
+        <div class="footer-badges">
+          <span class="badge">Licensed &amp; Insured</span>
+          <span class="badge">FL State Certified</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init('xCGCvNwDZSxDDY2CL');</script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>New Hire Onboarding | Polaris Fire Protection</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .onboard-progress { display:flex; justify-content:center; gap:.5rem; margin-bottom:3rem; flex-wrap:wrap; }
+    .step-pill { display:flex; align-items:center; gap:.4rem; padding:.45rem 1rem; border-radius:50px; font-size:.72rem; font-weight:600; letter-spacing:.03em; border:1.5px solid var(--c-border); color:var(--c-text-muted); background:var(--c-bg); cursor:pointer; transition:all .2s; }
+    .step-pill.active { background:var(--c-blue); border-color:var(--c-blue); color:var(--c-white); }
+    .step-pill.completed { background:#ecfdf5; border-color:#059669; color:#059669; }
+    .step-pill .num { display:inline-flex; align-items:center; justify-content:center; width:18px; height:18px; border-radius:50%; font-size:.6rem; font-weight:800; background:rgba(0,0,0,.08); }
+    .step-pill.active .num { background:rgba(255,255,255,.25); }
+    .step-pill.completed .num { background:#059669; color:white; }
+    .form-step { display:none; }
+    .form-step.visible { display:block; }
+    .onboard-wrap { max-width:820px; margin:0 auto; }
+    .onboard-card { background:var(--c-bg); border:1px solid var(--c-border); border-radius:8px; padding:2.5rem; }
+    @media(max-width:540px) { .onboard-card { padding:1.5rem; } }
+    .step-title { font-size:1.35rem; font-weight:800; color:var(--c-text); margin-bottom:.35rem; }
+    .step-desc { color:var(--c-text-muted); font-size:.9375rem; line-height:1.65; margin-bottom:2rem; }
+    .form-section-title { font-size:.72rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--c-red); margin-bottom:1.25rem; padding-bottom:.5rem; border-bottom:1px solid var(--c-border); }
+    .form-section-title:not(:first-of-type) { margin-top:2.25rem; }
+    .rules-list { list-style:none; counter-reset:rule; }
+    .rules-list li { counter-increment:rule; display:flex; gap:.75rem; padding:.75rem 0; border-bottom:1px solid var(--c-border); font-size:.875rem; color:var(--c-text-muted); line-height:1.6; }
+    .rules-list li::before { content:counter(rule) "."; font-weight:700; color:var(--c-text); min-width:24px; flex-shrink:0; }
+    .checklist-item { display:flex; align-items:flex-start; gap:.75rem; padding:.65rem 0; border-bottom:1px solid var(--c-border); }
+    .checklist-item:last-child { border-bottom:none; }
+    .checklist-item label { font-size:.875rem; color:var(--c-text-muted); line-height:1.55; cursor:pointer; flex:1; }
+    .checklist-item input[type="checkbox"] { width:auto!important; margin-top:3px; accent-color:var(--c-blue); flex-shrink:0; }
+    .form-grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.125rem; }
+    @media(max-width:640px) { .form-grid-3 { grid-template-columns:1fr; } }
+    .radio-group { display:flex; gap:1.25rem; flex-wrap:wrap; padding:.5rem 0; }
+    .radio-group label { display:flex; align-items:center; gap:.4rem; font-size:.875rem; font-weight:500; color:var(--c-text); cursor:pointer; }
+    .radio-group input { width:auto!important; accent-color:var(--c-red); }
+    .gov-form-link { display:flex; align-items:center; gap:1rem; padding:1.25rem 1.5rem; background:var(--c-bg-alt); border:1px solid var(--c-border); border-radius:8px; margin-bottom:1rem; transition:border-color .2s; }
+    .gov-form-link:hover { border-color:var(--c-blue); }
+    .gov-form-link .gov-icon { width:40px; height:40px; border-radius:6px; background:var(--c-blue-soft); color:var(--c-blue); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .gov-form-link h4 { font-size:.9375rem; color:var(--c-text); margin-bottom:.15rem; }
+    .gov-form-link p { font-size:.78rem; color:var(--c-text-muted); }
+    .nav-buttons { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--c-border); }
+    .nav-buttons .btn { min-width:140px; }
+    .final-success { text-align:center; padding:3rem 2rem; }
+    .final-success .icon-wrap { display:inline-flex; align-items:center; justify-content:center; width:60px; height:60px; border-radius:50%; background:#ecfdf5; color:#059669; margin:0 auto 1.5rem; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container nav-inner">
+      <a href="index.html" class="logo-link"><img src="images/logo.png" alt="Polaris Fire Protection" class="logo-img"></a>
+      <div class="nav-right">
+        <a href="tel:9546783934" class="phone-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.01L6.6 10.8z"/></svg>
+          <span>954-678-3934</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <h1>New Hire Onboarding</h1>
+      <p>Welcome to Polaris Fire Protection. Please complete each section below.</p>
+    </section>
+
+    <section style="padding:4rem 0;">
+      <div class="container onboard-wrap">
+
+        <div class="onboard-progress" id="progressBar">
+          <div class="step-pill active" data-step="0"><span class="num">1</span> Employee Info</div>
+          <div class="step-pill" data-step="1"><span class="num">2</span> Confidential</div>
+          <div class="step-pill" data-step="2"><span class="num">3</span> Work Rules</div>
+          <div class="step-pill" data-step="3"><span class="num">4</span> Fall Protection</div>
+          <div class="step-pill" data-step="4"><span class="num">5</span> W-4 &amp; I-9</div>
+        </div>
+
+        <form id="onboardForm" novalidate>
+
+          <!-- STEP 1: New Employee Information -->
+          <div class="form-step visible" data-step="0">
+            <div class="onboard-card">
+              <h2 class="step-title">New Employee Information Sheet</h2>
+              <p class="step-desc">Personal details, direct deposit, and emergency contact information.</p>
+              <p class="form-section-title">Personal Information</p>
+              <div class="form-grid-3">
+                <div class="field"><label>Last Name <span class="req">*</span></label><input name="ne_lastName" required></div>
+                <div class="field"><label>First Name <span class="req">*</span></label><input name="ne_firstName" required></div>
+                <div class="field"><label>Middle Name</label><input name="ne_middleName"></div>
+              </div>
+              <div class="field" style="margin-top:1.125rem"><label>Street Address <span class="req">*</span></label><input name="ne_address" required></div>
+              <div class="form-grid-3" style="margin-top:1.125rem">
+                <div class="field"><label>City <span class="req">*</span></label><input name="ne_city" required></div>
+                <div class="field"><label>State <span class="req">*</span></label><input name="ne_state" required></div>
+                <div class="field"><label>Zip Code <span class="req">*</span></label><input name="ne_zip" required></div>
+              </div>
+              <div class="form-row" style="margin-top:1.125rem">
+                <div class="field"><label>Home Phone</label><input name="ne_homePhone" type="tel"></div>
+                <div class="field"><label>Cell Phone <span class="req">*</span></label><input name="ne_cellPhone" type="tel" required></div>
+              </div>
+              <div class="form-row" style="margin-top:1.125rem">
+                <div class="field"><label>Email <span class="req">*</span></label><input name="ne_email" type="email" required></div>
+                <div class="field"><label>Social Security Number <span class="req">*</span></label><input name="ne_ssn" required placeholder="XXX-XX-XXXX" autocomplete="off"></div>
+              </div>
+              <div class="form-grid-3" style="margin-top:1.125rem">
+                <div class="field"><label>Driver's License #</label><input name="ne_dl"></div>
+                <div class="field"><label>DL State</label><input name="ne_dlState"></div>
+                <div class="field"><label>DL Expiration</label><input name="ne_dlExp" type="date"></div>
+              </div>
+              <p class="form-section-title">Direct Deposit Authorization</p>
+              <p style="font-size:.8rem;color:var(--c-text-muted);margin-bottom:1.25rem;">By providing this information, you authorize Polaris Fire Protection to initiate electronic credit and debit entries to the account listed below.</p>
+              <div class="field"><label>Account Type <span class="req">*</span></label>
+                <div class="radio-group"><label><input type="radio" name="ne_acctType" value="Checking" required> Checking</label><label><input type="radio" name="ne_acctType" value="Savings"> Savings</label></div>
+              </div>
+              <div class="form-row" style="margin-top:1.125rem">
+                <div class="field"><label>Routing Number <span class="req">*</span></label><input name="ne_routing" required autocomplete="off"></div>
+                <div class="field"><label>Account Number <span class="req">*</span></label><input name="ne_account" required autocomplete="off"></div>
+              </div>
+              <div class="form-row" style="margin-top:1.125rem">
+                <div class="field"><label>Bank Name</label><input name="ne_bankName"></div>
+                <div class="field"><label>Branch</label><input name="ne_bankBranch"></div>
+              </div>
+              <p class="form-section-title">Emergency Contact</p>
+              <div class="form-row">
+                <div class="field"><label>Contact Name <span class="req">*</span></label><input name="ne_emergName" required></div>
+                <div class="field"><label>Relationship <span class="req">*</span></label><input name="ne_emergRelation" required></div>
+              </div>
+              <div class="form-row" style="margin-top:1.125rem">
+                <div class="field"><label>Home Phone</label><input name="ne_emergHome" type="tel"></div>
+                <div class="field"><label>Cell Phone <span class="req">*</span></label><input name="ne_emergCell" type="tel" required></div>
+              </div>
+              <p class="form-section-title">Court Ordered Garnishments</p>
+              <div class="field"><label>Do you have any court ordered garnishments?</label>
+                <div class="radio-group"><label><input type="radio" name="ne_garnish" value="No"> No</label><label><input type="radio" name="ne_garnish" value="Yes"> Yes</label></div>
+              </div>
+              <div class="field" style="margin-top:.75rem"><label>If yes, provide details</label><input name="ne_garnishDetails"></div>
+              <div class="nav-buttons"><div></div><button type="button" class="btn btn-primary next-btn">Continue &rarr;</button></div>
+            </div>
+          </div>
+
+          <!-- STEP 2: Confidential Information -->
+          <div class="form-step" data-step="1">
+            <div class="onboard-card">
+              <h2 class="step-title">Confidential Information Sheet</h2>
+              <p class="step-desc">This information is voluntary and kept separate from employment records. Used for government compliance only.</p>
+              <p class="form-section-title">Demographics (Voluntary)</p>
+              <div class="field"><label>Race / Ethnicity</label>
+                <div class="radio-group">
+                  <label><input type="radio" name="ci_race" value="Asian"> Asian</label>
+                  <label><input type="radio" name="ci_race" value="Black"> Black</label>
+                  <label><input type="radio" name="ci_race" value="Caucasian"> Caucasian</label>
+                  <label><input type="radio" name="ci_race" value="Hispanic"> Hispanic</label>
+                  <label><input type="radio" name="ci_race" value="Native American"> Native American</label>
+                  <label><input type="radio" name="ci_race" value="Other"> Other</label>
+                  <label><input type="radio" name="ci_race" value="Prefer not to answer"> Prefer not to answer</label>
+                </div>
+              </div>
+              <div class="field" style="margin-top:1rem"><label>Gender</label>
+                <div class="radio-group">
+                  <label><input type="radio" name="ci_gender" value="Male"> Male</label>
+                  <label><input type="radio" name="ci_gender" value="Female"> Female</label>
+                  <label><input type="radio" name="ci_gender" value="Prefer not to answer"> Prefer not to answer</label>
+                </div>
+              </div>
+              <p class="form-section-title">Disability (Voluntary)</p>
+              <div class="field"><label>Do you have a physical or mental impairment that substantially limits one or more major life activities?</label>
+                <div class="radio-group"><label><input type="radio" name="ci_disability" value="Yes"> Yes</label><label><input type="radio" name="ci_disability" value="No"> No</label><label><input type="radio" name="ci_disability" value="Prefer not to answer"> Prefer not to answer</label></div>
+              </div>
+              <p class="form-section-title">Veteran Status (Voluntary)</p>
+              <div class="field"><label>Have you served in the military?</label>
+                <div class="radio-group"><label><input type="radio" name="ci_veteran" value="Yes"> Yes</label><label><input type="radio" name="ci_veteran" value="No"> No</label></div>
+              </div>
+              <div class="form-row" style="margin-top:.75rem">
+                <div class="field"><label>If yes, served from</label><input name="ci_vetFrom" placeholder="MM/YYYY"></div>
+                <div class="field"><label>To</label><input name="ci_vetTo" placeholder="MM/YYYY"></div>
+              </div>
+              <p class="form-section-title">Medical Information (Voluntary)</p>
+              <div class="field"><label>Any medical conditions pertinent to emergency treatment?</label><textarea name="ci_medical" rows="3" placeholder="Leave blank if none"></textarea></div>
+              <div class="nav-buttons">
+                <button type="button" class="btn btn-ghost-dark prev-btn">&larr; Back</button>
+                <button type="button" class="btn btn-primary next-btn">Continue &rarr;</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 3: Work Rules -->
+          <div class="form-step" data-step="2">
+            <div class="onboard-card">
+              <h2 class="step-title">Work Rules</h2>
+              <p class="step-desc">Please read all 30 work rules below, then acknowledge at the bottom.</p>
+              <ol class="rules-list">
+                <li>All tools and equipment shall be maintained in good condition.</li>
+                <li>Damaged tools or equipment shall be removed from service and tagged "DEFECTIVE".</li>
+                <li>Only appropriate tools shall be used for the job.</li>
+                <li>Wrenches shall not be altered by the addition of handle extensions or "cheaters".</li>
+                <li>Portable electric tools shall not be lifted or lowered by means of power cord. Use ropes if needed.</li>
+                <li>Only authorized personnel shall operate machinery or equipment.</li>
+                <li>Loose or frayed clothing, long hair, dangling ties, finger rings, etc., shall not be worn around moving machinery or other sources of entanglement.</li>
+                <li>Machinery shall not be serviced, repaired or adjusted while in operation, nor shall oiling of moving parts be attempted, except on equipment designed with safeguards.</li>
+                <li>Use hand carts, mechanical stock handling equipment, or other workers when moving heavy loads.</li>
+                <li>Consult MSDSs if you do not know the hazards associated with a particular chemical.</li>
+                <li>Foremen shall insist on employees observing every rule, regulation, and order necessary for safe conduct of work.</li>
+                <li>Anyone under the influence of drugs or intoxicating substances shall not be allowed on the job.</li>
+                <li>Work shall be well planned and supervised to prevent injuries in handling materials and working with equipment.</li>
+                <li>No one shall be permitted or required to work while impaired by fatigue, illness, or other causes.</li>
+                <li>Do not enter voids, chambers, tanks, or similar places with poor ventilation unless determined safe by a competent individual.</li>
+                <li>Do not handle or tamper with electrical equipment, machinery, or utility lines outside the scope of your duties without supervisor instructions.</li>
+                <li>All injuries shall be reported promptly to the supervisor.</li>
+                <li>Maintain good housekeeping at all times.</li>
+                <li>Materials, tools, or objects shall not be thrown from buildings until proper precautions are taken.</li>
+                <li>Before leaving any job, be sure it is in a safe condition.</li>
+                <li>Arrange work so employees face the ladder and use both hands while climbing.</li>
+                <li>Report any damaged scaffolds, false work, or supporting structures immediately.</li>
+                <li>Always place ladders so that side rails have secure footing.</li>
+                <li>Do not climb higher than the third rung from the top on straight ladders, nor the second tread on step ladders.</li>
+                <li>Keep appropriate fire extinguishers at or near the work location.</li>
+                <li>Absolutely no smoking in areas where flammable chemicals are present.</li>
+                <li>Always use proper respiratory protection when working around paints or dust.</li>
+                <li>Check with your supervisor for proper PPE: gloves, goggles, protective suits, barrier creams.</li>
+                <li>Follow all safety precautions on MSDSs and environmental regulations when using chemicals.</li>
+                <li>Always wear safety belts when operating company vehicles or personal vehicles on company business.</li>
+              </ol>
+              <div style="margin-top:2rem">
+                <label style="display:flex;align-items:flex-start;gap:.5rem;font-size:.9rem;color:var(--c-text);cursor:pointer;">
+                  <input type="checkbox" name="wr_acknowledge" required style="width:auto;margin-top:3px;accent-color:var(--c-red);">
+                  I have read and understand the above work rules and agree to comply with them. <span class="req">*</span>
+                </label>
+              </div>
+              <div class="nav-buttons">
+                <button type="button" class="btn btn-ghost-dark prev-btn">&larr; Back</button>
+                <button type="button" class="btn btn-primary next-btn">Continue &rarr;</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 4: Fall Protection -->
+          <div class="form-step" data-step="3">
+            <div class="onboard-card">
+              <h2 class="step-title">Fall Protection Training Checklist</h2>
+              <p class="step-desc">Confirm each item below regarding your fall protection training.</p>
+              <div class="checklist-item"><input type="checkbox" name="fp_1" id="fp1"><label for="fp1">I have been provided with effective information and training on Fall Protection.</label></div>
+              <div class="checklist-item"><input type="checkbox" name="fp_2" id="fp2"><label for="fp2">Training was provided at the time of my initial employment.</label></div>
+              <div class="checklist-item"><input type="checkbox" name="fp_3" id="fp3"><label for="fp3">I have been trained to recognize the hazards of falling and effective procedures to minimize those hazards.</label></div>
+              <div class="checklist-item"><input type="checkbox" name="fp_4" id="fp4"><label for="fp4">I have been trained on the nature of fall hazards in the workplace or jobsite.</label></div>
+              <div class="checklist-item"><input type="checkbox" name="fp_5" id="fp5"><label for="fp5">I have been provided with procedures for erecting, maintaining, disassembling, and inspecting fall protection systems.</label></div>
+              <div class="checklist-item"><input type="checkbox" name="fp_6" id="fp6"><label for="fp6">I have been trained on the use of guardrail systems, personal fall arrest systems, safety nets, warning lines, and controlled access zones.</label></div>
+              <div class="checklist-item"><input type="checkbox" name="fp_7" id="fp7"><label for="fp7">I have been trained about my role in the safety monitoring system.</label></div>
+              <div class="checklist-item"><input type="checkbox" name="fp_8" id="fp8"><label for="fp8">I understand that no work is allowed on unprotected roofs without prior hazard analysis and safety director approval.</label></div>
+              <div class="checklist-item"><input type="checkbox" name="fp_9" id="fp9"><label for="fp9">I have been trained in my role in the fall protection plan.</label></div>
+              <div class="nav-buttons">
+                <button type="button" class="btn btn-ghost-dark prev-btn">&larr; Back</button>
+                <button type="button" class="btn btn-primary next-btn">Continue &rarr;</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 5: W-4 & I-9 -->
+          <div class="form-step" data-step="4">
+            <div class="onboard-card">
+              <h2 class="step-title">W-4 and I-9 Forms</h2>
+              <p class="step-desc">Federal law requires these government forms. Click below to open each one. HR will assist you with completing them.</p>
+              <a href="https://www.irs.gov/pub/irs-prior/fw4--2025.pdf" target="_blank" rel="noopener" class="gov-form-link">
+                <div class="gov-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+                <div><h4>IRS Form W-4 (2025)</h4><p>Employee's Withholding Certificate (fillable PDF)</p></div>
+              </a>
+              <a href="https://www.uscis.gov/sites/default/files/document/forms/i-9.pdf" target="_blank" rel="noopener" class="gov-form-link">
+                <div class="gov-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+                <div><h4>USCIS Form I-9</h4><p>Employment Eligibility Verification (fillable PDF)</p></div>
+              </a>
+              <div class="field" style="margin-top:1.5rem">
+                <label style="display:flex;align-items:flex-start;gap:.5rem;font-size:.9rem;color:var(--c-text);cursor:pointer;">
+                  <input type="checkbox" name="gov_acknowledge" required style="width:auto;margin-top:3px;accent-color:var(--c-red);">
+                  I understand that I must complete the W-4 and I-9 forms and provide the required documents to Polaris Fire Protection. <span class="req">*</span>
+                </label>
+              </div>
+              <div class="nav-buttons">
+                <button type="button" class="btn btn-ghost-dark prev-btn">&larr; Back</button>
+                <button type="submit" class="btn btn-primary" id="submitOnboard">Generate PDF &amp; Submit</button>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <!-- Success -->
+        <div id="onboardSuccess" style="display:none;">
+          <div class="onboard-card final-success">
+            <div class="icon-wrap"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <h2 style="font-size:1.5rem;font-weight:800;color:var(--c-text);margin-bottom:.5rem;">Onboarding Complete</h2>
+            <p style="color:var(--c-text-muted);font-size:1rem;max-width:420px;margin:0 auto 1.5rem;line-height:1.7;">Your new hire packet PDF has been generated. Please hand the iPad back to HR. Thank you and welcome to Polaris!</p>
+            <p style="font-size:.875rem;color:var(--c-text-muted);">Questions? Call <a href="tel:9546783934" style="color:var(--c-red);font-weight:600;">954-678-3934</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <p>&copy; 2025 Polaris Fire Protection. All rights reserved.</p>
+        <div class="footer-badges"><span class="badge">Licensed &amp; Insured</span> <span class="badge">FL State Certified</span></div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+  <script>
+    // Step navigation
+    const steps = document.querySelectorAll('.form-step');
+    const pills = document.querySelectorAll('.step-pill');
+    let current = 0;
+
+    function goTo(idx) {
+      steps[current].classList.remove('visible');
+      pills[current].classList.remove('active');
+      pills[current].classList.add('completed');
+      pills[current].querySelector('.num').textContent = '\u2713';
+      current = idx;
+      steps[current].classList.add('visible');
+      pills[current].classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.querySelectorAll('.next-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const req = steps[current].querySelectorAll('[required]');
+        let ok = true;
+        req.forEach(f => { if (!f.checkValidity()) { f.reportValidity(); ok = false; } });
+        if (!ok) return;
+        if (current < steps.length - 1) goTo(current + 1);
+      });
+    });
+
+    document.querySelectorAll('.prev-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (current > 0) {
+          steps[current].classList.remove('visible');
+          pills[current].classList.remove('active');
+          current--;
+          steps[current].classList.add('visible');
+          pills[current].classList.remove('completed');
+          pills[current].classList.add('active');
+          pills[current].querySelector('.num').textContent = current + 1;
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    });
+
+    pills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        const idx = parseInt(pill.dataset.step);
+        if (pill.classList.contains('completed')) {
+          steps[current].classList.remove('visible');
+          pills[current].classList.remove('active');
+          current = idx;
+          steps[current].classList.add('visible');
+          pills[current].classList.remove('completed');
+          pills[current].classList.add('active');
+          pills[current].querySelector('.num').textContent = current + 1;
+        }
+      });
+    });
+
+    // Form submit: generate PDF
+    const form = document.getElementById('onboardForm');
+    const submitBtn = document.getElementById('submitOnboard');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Generating PDF...';
+
+      const fd = new FormData(form);
+      const d = {};
+      for (const [k, v] of fd.entries()) d[k] = v;
+
+      try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('p', 'mm', 'letter');
+        const W = 215.9;
+        const M = 18; // margin
+        const pw = W - M * 2; // printable width
+        let y = 15;
+        const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        function header(title) {
+          doc.setFillColor(204, 41, 54);
+          doc.rect(M, y, pw, 0.5, 'F');
+          y += 4;
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(11);
+          doc.setTextColor(204, 41, 54);
+          doc.text(title.toUpperCase(), M, y);
+          y += 6;
+          doc.setTextColor(34, 34, 34);
+        }
+
+        function row(label, value, indent) {
+          const x = indent ? M + 4 : M;
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(9);
+          doc.text(label + ':', x, y);
+          doc.setFont('helvetica', 'normal');
+          doc.text(String(value || 'N/A'), x + doc.getTextWidth(label + ':  '), y);
+          y += 5;
+          if (y > 260) { doc.addPage(); y = 18; }
+        }
+
+        function pageHeader(pageTitle) {
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(16);
+          doc.setTextColor(204, 41, 54);
+          doc.text('POLARIS FIRE PROTECTION', W / 2, y, { align: 'center' });
+          y += 6;
+          doc.setFontSize(10);
+          doc.setTextColor(100, 100, 100);
+          doc.text(pageTitle, W / 2, y, { align: 'center' });
+          y += 4;
+          doc.setFontSize(8);
+          doc.text('4009 SW 7th St, Plantation FL 33317', W / 2, y, { align: 'center' });
+          y += 8;
+          doc.setTextColor(34, 34, 34);
+        }
+
+        // ===== PAGE 1: Employee Information =====
+        pageHeader('NEW EMPLOYEE INFORMATION SHEET');
+
+        header('Personal Information');
+        row('Name', (d.ne_firstName || '') + ' ' + (d.ne_middleName || '') + ' ' + (d.ne_lastName || ''));
+        row('Address', d.ne_address || '');
+        row('City, State, Zip', (d.ne_city || '') + ', ' + (d.ne_state || '') + ' ' + (d.ne_zip || ''));
+        row('Home Phone', d.ne_homePhone);
+        row('Cell Phone', d.ne_cellPhone);
+        row('Email', d.ne_email);
+        row('SSN', d.ne_ssn);
+        row("Driver's License", (d.ne_dl || 'N/A') + '  State: ' + (d.ne_dlState || 'N/A') + '  Exp: ' + (d.ne_dlExp || 'N/A'));
+        y += 3;
+
+        header('Direct Deposit Authorization');
+        row('Account Type', d.ne_acctType);
+        row('Routing Number', d.ne_routing);
+        row('Account Number', d.ne_account);
+        row('Bank Name', d.ne_bankName);
+        row('Branch', d.ne_bankBranch);
+        y += 3;
+
+        header('Emergency Contact');
+        row('Name', d.ne_emergName);
+        row('Relationship', d.ne_emergRelation);
+        row('Home Phone', d.ne_emergHome);
+        row('Cell Phone', d.ne_emergCell);
+        y += 3;
+
+        header('Court Ordered Garnishments');
+        row('Garnishments', d.ne_garnish || 'No');
+        if (d.ne_garnishDetails) row('Details', d.ne_garnishDetails);
+        y += 6;
+
+        doc.setFontSize(8);
+        doc.setTextColor(100);
+        doc.text('Signature: ________________________________   Date: ' + today, M, y);
+        y += 10;
+        doc.text('Date: ' + today, W - M - 40, 275);
+
+        // ===== PAGE 2: Confidential Information =====
+        doc.addPage(); y = 15;
+        pageHeader('CONFIDENTIAL INFORMATION SHEET');
+
+        doc.setFontSize(8);
+        doc.setTextColor(100);
+        const disc = 'This information is voluntary, confidential and will not affect employment decisions. Used for government compliance only.';
+        const discLines = doc.splitTextToSize(disc, pw);
+        doc.text(discLines, M, y);
+        y += discLines.length * 4 + 4;
+        doc.setTextColor(34, 34, 34);
+
+        header('Demographics');
+        row('Race / Ethnicity', d.ci_race || 'Not provided');
+        row('Gender', d.ci_gender || 'Not provided');
+        y += 3;
+
+        header('Disability');
+        row('Disability', d.ci_disability || 'Not provided');
+        y += 3;
+
+        header('Veteran Status');
+        row('Military Service', d.ci_veteran || 'Not provided');
+        if (d.ci_vetFrom) row('Served', (d.ci_vetFrom || '') + ' to ' + (d.ci_vetTo || ''));
+        y += 3;
+
+        header('Medical Information');
+        row('Medical Conditions', d.ci_medical || 'None');
+        y += 6;
+
+        doc.setFontSize(8);
+        doc.setTextColor(100);
+        doc.text('Signature: ________________________________   Date: ' + today, M, y);
+
+        // ===== PAGE 3: Work Rules =====
+        doc.addPage(); y = 15;
+        pageHeader('WORK RULES');
+
+        doc.setFontSize(8);
+        doc.setTextColor(34, 34, 34);
+        const rules = [
+          'All tools and equipment shall be maintained in good condition.',
+          'Damaged tools or equipment shall be removed from service and tagged "DEFECTIVE".',
+          'Only appropriate tools shall be used for the job.',
+          'Wrenches shall not be altered by the addition of handle extensions or "cheaters".',
+          'Portable electric tools shall not be lifted or lowered by means of power cord.',
+          'Only authorized personnel shall operate machinery or equipment.',
+          'Loose clothing, long hair, dangling ties, rings shall not be worn around moving machinery.',
+          'Machinery shall not be serviced while in operation except on equipment with safeguards.',
+          'Use hand carts or mechanical equipment when moving heavy loads.',
+          'Consult MSDSs for chemical hazards.',
+          'Foremen shall insist on observance of every safety rule and regulation.',
+          'Anyone under the influence of drugs or intoxicating substances shall not be on the job.',
+          'Work shall be planned and supervised to prevent injuries.',
+          'No one shall work while impaired by fatigue, illness, or other causes.',
+          'Do not enter poorly ventilated spaces unless determined safe.',
+          'Do not handle electrical equipment outside your scope without supervisor approval.',
+          'All injuries shall be reported promptly to the supervisor.',
+          'Maintain good housekeeping at all times.',
+          'Do not throw materials from buildings without proper precautions.',
+          'Before leaving any job, ensure it is in a safe condition.',
+          'Face the ladder and use both hands while climbing.',
+          'Report damaged scaffolds or supporting structures immediately.',
+          'Always place ladders with secure footing.',
+          'Do not climb higher than the third rung from top on straight ladders.',
+          'Keep fire extinguishers at or near the work location.',
+          'No smoking in areas with flammable chemicals.',
+          'Use proper respiratory protection around paints or dust.',
+          'Check with supervisor for proper PPE.',
+          'Follow all MSDS safety precautions and environmental regulations.',
+          'Always wear safety belts in company or personal vehicles on company business.'
+        ];
+
+        rules.forEach((rule, i) => {
+          const num = (i + 1) + '. ';
+          const lines = doc.splitTextToSize(num + rule, pw - 4);
+          if (y + lines.length * 3.5 > 258) { doc.addPage(); y = 18; }
+          doc.text(lines, M + 2, y);
+          y += lines.length * 3.5 + 1;
+        });
+
+        y += 6;
+        if (y > 250) { doc.addPage(); y = 18; }
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9);
+        doc.text('ACKNOWLEDGED: ' + (d.wr_acknowledge ? 'Yes' : 'No'), M, y);
+        y += 8;
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.setTextColor(100);
+        doc.text('Signature: ________________________________   Date: ' + today, M, y);
+
+        // ===== PAGE 4: Fall Protection =====
+        doc.addPage(); y = 15;
+        pageHeader('EMPLOYEE FALL PROTECTION TRAINING CHECKLIST');
+
+        const fpItems = [
+          'Provided with effective information and training on Fall Protection.',
+          'Training provided at the time of initial employment.',
+          'Trained to recognize hazards of falling and procedures to minimize them.',
+          'Trained on the nature of fall hazards in the workplace.',
+          'Provided with procedures for fall protection systems.',
+          'Trained on guardrail systems, fall arrest systems, safety nets, warning lines.',
+          'Trained about role in safety monitoring system.',
+          'Understand no work on unprotected roofs without approval.',
+          'Trained in role in fall protection plan.'
+        ];
+
+        doc.setFontSize(9);
+        doc.setTextColor(34, 34, 34);
+        fpItems.forEach((item, i) => {
+          const checked = d['fp_' + (i + 1)] ? '[X]' : '[ ]';
+          const lines = doc.splitTextToSize(checked + '  ' + item, pw - 4);
+          doc.text(lines, M + 2, y);
+          y += lines.length * 4.5 + 2;
+        });
+
+        y += 6;
+        doc.setFontSize(8);
+        doc.setTextColor(100);
+        doc.text('Signature: ________________________________   Date: ' + today, M, y);
+
+        // ===== PAGE 5: W-4 / I-9 Acknowledgment =====
+        doc.addPage(); y = 15;
+        pageHeader('W-4 & I-9 ACKNOWLEDGMENT');
+
+        doc.setFontSize(10);
+        doc.setTextColor(34, 34, 34);
+        y += 5;
+        const ackText = 'I, ' + (d.ne_firstName || '') + ' ' + (d.ne_lastName || '') + ', understand that I must complete the IRS Form W-4 (Employee\'s Withholding Certificate) and USCIS Form I-9 (Employment Eligibility Verification) and provide the required identification documents to Polaris Fire Protection.';
+        const ackLines = doc.splitTextToSize(ackText, pw);
+        doc.text(ackLines, M, y);
+        y += ackLines.length * 5 + 10;
+
+        doc.text('Acknowledged: ' + (d.gov_acknowledge ? 'Yes' : 'No'), M, y);
+        y += 15;
+
+        doc.setFontSize(8);
+        doc.setTextColor(100);
+        doc.text('Signature: ________________________________   Date: ' + today, M, y);
+        y += 15;
+        doc.text('Name: ' + (d.ne_firstName || '') + ' ' + (d.ne_lastName || ''), M, y);
+
+        // Save PDF
+        const filename = 'NewHire_' + (d.ne_lastName || 'Employee') + '_' + (d.ne_firstName || '') + '_' + new Date().toISOString().slice(0,10) + '.pdf';
+        doc.save(filename);
+
+        // Show success
+        form.style.display = 'none';
+        document.getElementById('progressBar').style.display = 'none';
+        document.getElementById('onboardSuccess').style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      } catch (err) {
+        console.error(err);
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Generate PDF & Submit';
+        alert('Error generating PDF. Please try again or contact HR at 954-678-3934.');
+      }
+    });
+  </script>
+</body>
+</html>
