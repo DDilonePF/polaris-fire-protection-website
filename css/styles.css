@@ -21,16 +21,16 @@
   --c-bg-dark: #060607;
   --c-bg-dark-2: #17171C;
 
-  --c-accent: #E05020;
-  --c-accent-hover: #C84518;
-  --c-accent-dim: rgba(224, 80, 32, 0.12);
+  --c-accent: #CC2936;
+  --c-accent-hover: #A8202C;
+  --c-accent-dim: rgba(204, 41, 54, 0.12);
 
   /* Legacy color aliases */
-  --c-red: #E05020;
-  --c-red-hover: #C84518;
-  --c-red-soft: rgba(224, 80, 32, 0.12);
-  --c-blue: #E05020;
-  --c-blue-soft: rgba(224, 80, 32, 0.1);
+  --c-red: #CC2936;
+  --c-red-hover: #A8202C;
+  --c-red-soft: rgba(204, 41, 54, 0.12);
+  --c-blue: #CC2936;
+  --c-blue-soft: rgba(204, 41, 54, 0.1);
 
   --c-text: #EDE9DF;
   --c-text-muted: #6A6675;
