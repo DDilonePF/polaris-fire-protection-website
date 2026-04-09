@@ -1083,7 +1083,7 @@ header.transparent .hamburger span {
 .page-hero {
   padding: 11rem 0 5rem;
   background: var(--c-surface);
-  text-align: left;
+  text-align: center;
   position: relative;
   border-bottom: 1px solid var(--c-border);
   overflow: hidden;
