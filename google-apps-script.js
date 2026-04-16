@@ -15,7 +15,7 @@
 
 function doPost(e) {
   try {
-    var data = JSON.parse(e.postData.contents);
+    var data = JSON.parse(e.parameter.payload || e.postData.contents);
 
     var pdfBytes = Utilities.base64Decode(data.pdfBase64);
     var pdfBlob = Utilities.newBlob(pdfBytes, 'application/pdf', data.filename);

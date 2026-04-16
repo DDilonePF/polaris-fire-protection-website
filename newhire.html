@@ -1126,17 +1126,17 @@
         const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4JloP_Euveecne0m2Y_nq1T0ohCBYWmvAZ0ZNYCJxiBp1-E2qAgMNnlbD-4cebLvkRg/exec';
 
         try {
+          var formBody = new FormData();
+          formBody.append('payload', JSON.stringify({
+            pdfBase64: pdfBase64,
+            filename: filename,
+            applicantName: (d.ne_firstName || d.app_firstName || '') + ' ' + (d.ne_lastName || d.app_lastName || ''),
+            position: d.app_position || 'Not specified',
+            date: today
+          }));
           await fetch(APPS_SCRIPT_URL, {
             method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              pdfBase64: pdfBase64,
-              filename: filename,
-              applicantName: (d.ne_firstName || d.app_firstName || '') + ' ' + (d.ne_lastName || d.app_lastName || ''),
-              position: d.app_position || 'Not specified',
-              date: today
-            })
+            body: formBody
           });
         } catch (emailErr) {
           console.error('Email error:', emailErr);
