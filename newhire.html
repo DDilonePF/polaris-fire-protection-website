@@ -1119,25 +1119,24 @@
         const filename = 'NewHire_' + (d.ne_lastName || 'Employee') + '_' + (d.ne_firstName || '') + '_' + new Date().toISOString().slice(0,10) + '.pdf';
         doc.save(filename);
 
-        // Email PDF via Google Apps Script
+        // Email PDF via Azure Function API
         const pdfBase64 = doc.output('datauristring').split(',')[1];
         submitBtn.textContent = 'Sending email...';
 
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4JloP_Euveecne0m2Y_nq1T0ohCBYWmvAZ0ZNYCJxiBp1-E2qAgMNnlbD-4cebLvkRg/exec';
-
         try {
-          var formBody = new FormData();
-          formBody.append('payload', JSON.stringify({
-            pdfBase64: pdfBase64,
-            filename: filename,
-            applicantName: (d.ne_firstName || d.app_firstName || '') + ' ' + (d.ne_lastName || d.app_lastName || ''),
-            position: d.app_position || 'Not specified',
-            date: today
-          }));
-          await fetch(APPS_SCRIPT_URL, {
+          const resp = await fetch('/api/send-newhire-email', {
             method: 'POST',
-            body: formBody
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              pdfBase64: pdfBase64,
+              filename: filename,
+              applicantName: (d.ne_firstName || d.app_firstName || '') + ' ' + (d.ne_lastName || d.app_lastName || ''),
+              position: d.app_position || 'Not specified',
+              date: today
+            })
           });
+          const result = await resp.json();
+          if (!result.success) console.error('Email API error:', result.error);
         } catch (emailErr) {
           console.error('Email error:', emailErr);
           alert('PDF was downloaded but the email could not be sent. Please forward the PDF to jobapplications@polarisfp.com manually.');
