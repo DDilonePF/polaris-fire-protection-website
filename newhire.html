@@ -38,11 +38,6 @@
     .radio-group { display:flex; gap:1.25rem; flex-wrap:wrap; padding:.5rem 0; }
     .radio-group label { display:flex; align-items:center; gap:.4rem; font-size:.875rem; font-weight:500; color:var(--c-text); cursor:pointer; }
     .radio-group input { width:auto!important; accent-color:var(--c-red); }
-    .gov-form-link { display:flex; align-items:center; gap:1rem; padding:1.25rem 1.5rem; background:var(--c-bg-alt); border:1px solid var(--c-border); border-radius:8px; margin-bottom:1rem; transition:border-color .2s; }
-    .gov-form-link:hover { border-color:var(--c-blue); }
-    .gov-form-link .gov-icon { width:40px; height:40px; border-radius:6px; background:var(--c-blue-soft); color:var(--c-blue); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-    .gov-form-link h4 { font-size:.9375rem; color:var(--c-text); margin-bottom:.15rem; }
-    .gov-form-link p { font-size:.78rem; color:var(--c-text-muted); }
     .nav-buttons { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--c-border); }
     .nav-buttons .btn { min-width:140px; }
     .final-success { text-align:center; padding:3rem 2rem; }
@@ -50,6 +45,11 @@
     .employer-block { background:var(--c-bg-alt); border:1px solid var(--c-border); border-radius:6px; padding:1.5rem; margin-bottom:1rem; }
     .employer-block h4 { font-size:.78rem; font-weight:700; color:var(--c-text-muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:1rem; }
     .field-full { grid-column:1 / -1; }
+    .cert-table { width:100%; border-collapse:collapse; margin-top:.5rem; }
+    .cert-table th, .cert-table td { border:1px solid var(--c-border); padding:.5rem .65rem; font-size:.8rem; text-align:left; }
+    .cert-table th { background:var(--c-bg-alt); font-weight:700; font-size:.72rem; text-transform:uppercase; letter-spacing:.05em; color:var(--c-text-muted); }
+    .cert-table td input { width:100%; border:none; background:transparent; font-family:var(--font-sans); font-size:.8rem; color:var(--c-text); outline:none; }
+    .cert-table td input::placeholder { color:var(--c-text-muted); opacity:.6; }
     .lang-toggle { display:flex; justify-content:center; gap:.5rem; margin-bottom:1.25rem; }
     .dl-btn { display:inline-flex; align-items:center; gap:.5rem; padding:.4rem 1rem; border:1.5px solid var(--c-border); border-radius:var(--radius); font-family:var(--font-sans); font-size:.75rem; font-weight:600; color:var(--c-text); background:var(--c-bg); cursor:pointer; transition:border-color .2s,color .2s; text-decoration:none; }
     .dl-btn:hover { border-color:var(--c-red); color:var(--c-red); }
@@ -90,7 +90,6 @@
           <div class="step-pill" data-step="2"><span class="num">3</span><span class="pill-label" data-i18n="pill2"> Confidential</span></div>
           <div class="step-pill" data-step="3"><span class="num">4</span><span class="pill-label" data-i18n="pill3"> Work Rules</span></div>
           <div class="step-pill" data-step="4"><span class="num">5</span><span class="pill-label" data-i18n="pill4"> Fall Protection</span></div>
-          <div class="step-pill" data-step="5"><span class="num">6</span><span class="pill-label" data-i18n="pill5"> W-4 &amp; I-9</span></div>
         </div>
 
         <form id="onboardForm" novalidate>
@@ -171,7 +170,23 @@
               </div>
 
               <p class="form-section-title" data-i18n="secCertLic">Certifications &amp; Licenses</p>
-              <div class="field"><label data-i18n="lblCertList">List any relevant licenses, certifications, or NICET levels</label><textarea name="app_certifications" rows="3" placeholder="e.g. NICET Level II, Backflow Certification, Florida Driver's License Class E, OSHA 30..."></textarea></div>
+              <table class="cert-table">
+                <thead>
+                  <tr>
+                    <th data-i18n="certColType">Type and/or Class</th>
+                    <th data-i18n="certColNumber">License / Certification Number</th>
+                    <th data-i18n="certColExp">Expiration Date</th>
+                    <th data-i18n="certColGranted">Granted By (Board or Commission, State)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><input name="cert_type_1" placeholder="e.g. NICET Level II"></td><td><input name="cert_num_1"></td><td><input name="cert_exp_1" type="date"></td><td><input name="cert_granted_1" placeholder="e.g. NICET, FL"></td></tr>
+                  <tr><td><input name="cert_type_2"></td><td><input name="cert_num_2"></td><td><input name="cert_exp_2" type="date"></td><td><input name="cert_granted_2"></td></tr>
+                  <tr><td><input name="cert_type_3"></td><td><input name="cert_num_3"></td><td><input name="cert_exp_3" type="date"></td><td><input name="cert_granted_3"></td></tr>
+                  <tr><td><input name="cert_type_4"></td><td><input name="cert_num_4"></td><td><input name="cert_exp_4" type="date"></td><td><input name="cert_granted_4"></td></tr>
+                  <tr><td><input name="cert_type_5"></td><td><input name="cert_num_5"></td><td><input name="cert_exp_5" type="date"></td><td><input name="cert_granted_5"></td></tr>
+                </tbody>
+              </table>
 
               <p class="form-section-title" data-i18n="secAddlInfo">Additional Information</p>
               <div class="field"><label data-i18n="lblAddlNotes">Anything else you'd like us to know?</label><textarea name="app_notes" rows="3" placeholder="Availability details, referral source, etc."></textarea></div>
@@ -359,36 +374,11 @@
               <div class="checklist-item"><input type="checkbox" name="fp_9" id="fp9"><label for="fp9" data-i18n="fp9">I have been trained in my role in the fall protection plan.</label></div>
               <div class="nav-buttons">
                 <button type="button" class="btn btn-ghost-dark prev-btn" data-i18n="btnBack">&larr; Back</button>
-                <button type="button" class="btn btn-primary next-btn" data-i18n="btnContinue">Continue &rarr;</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- STEP 6: W-4 & I-9 -->
-          <div class="form-step" data-step="5">
-            <div class="onboard-card">
-              <h2 class="step-title" data-i18n="step5Title">W-4 and I-9 Forms</h2>
-              <p class="step-desc" data-i18n="step5Desc">Federal law requires these government forms. Click below to open each one. HR will assist you with completing them.</p>
-              <a href="https://www.irs.gov/pub/irs-prior/fw4--2025.pdf" target="_blank" rel="noopener" class="gov-form-link">
-                <div class="gov-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
-                <div><h4>IRS Form W-4 (2025)</h4><p data-i18n="w4Subtitle">Employee's Withholding Certificate (fillable PDF)</p></div>
-              </a>
-              <a href="https://www.uscis.gov/sites/default/files/document/forms/i-9.pdf" target="_blank" rel="noopener" class="gov-form-link">
-                <div class="gov-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
-                <div><h4>USCIS Form I-9</h4><p data-i18n="i9Subtitle">Employment Eligibility Verification (fillable PDF)</p></div>
-              </a>
-              <div class="field" style="margin-top:1.5rem">
-                <label style="display:flex;align-items:flex-start;gap:.5rem;font-size:.9rem;color:var(--c-text);cursor:pointer;">
-                  <input type="checkbox" name="gov_acknowledge" required style="width:auto;margin-top:3px;accent-color:var(--c-red);">
-                  <span data-i18n="govAckText">I understand that I must complete the W-4 and I-9 forms and provide the required documents to Polaris Fire Protection.</span> <span class="req">*</span>
-                </label>
-              </div>
-              <div class="nav-buttons">
-                <button type="button" class="btn btn-ghost-dark prev-btn" data-i18n="btnBack">&larr; Back</button>
                 <button type="submit" class="btn btn-primary" id="submitOnboard" data-i18n="btnSubmit">Generate PDF &amp; Submit</button>
               </div>
             </div>
           </div>
+
         </form>
 
         <!-- Success -->
@@ -430,7 +420,10 @@
         pill2: ' Confidential',
         pill3: ' Work Rules',
         pill4: ' Fall Protection',
-        pill5: ' W-4 & I-9',
+        certColType: 'Type and/or Class',
+        certColNumber: 'License / Certification Number',
+        certColExp: 'Expiration Date',
+        certColGranted: 'Granted By (Board or Commission, State)',
         step0Title: 'Employment Application',
         step0Desc: 'Complete the application below. Fields marked with * are required.',
         step1Title: 'New Employee Information Sheet',
@@ -441,8 +434,6 @@
         step3Desc: 'Please read all 30 work rules below, then acknowledge at the bottom.',
         step4Title: 'Fall Protection Training Checklist',
         step4Desc: 'Confirm each item below regarding your fall protection training.',
-        step5Title: 'W-4 and I-9 Forms',
-        step5Desc: 'Federal law requires these government forms. Click below to open each one. HR will assist you with completing them.',
         secPositionInfo: 'Position Information',
         secPersonalInfo: 'Personal Information',
         secEducation: 'Education',
@@ -481,7 +472,6 @@
         lblStartDate: 'Start Date',
         lblEndDate: 'End Date',
         lblDutiesReason: 'Duties and Reason for Leaving',
-        lblCertList: 'List any relevant licenses, certifications, or NICET levels',
         lblAddlNotes: "Anything else you'd like us to know?",
         appCertifyText: 'I certify that the information provided in this application is true and complete to the best of my knowledge.',
         lblHomePhone: 'Home Phone',
@@ -508,9 +498,6 @@
         lblTo: 'To',
         lblMedicalQ: 'Any medical conditions pertinent to emergency treatment?',
         wrAckText: 'I have read and understand the above work rules and agree to comply with them.',
-        w4Subtitle: "Employee's Withholding Certificate (fillable PDF)",
-        i9Subtitle: 'Employment Eligibility Verification (fillable PDF)',
-        govAckText: 'I understand that I must complete the W-4 and I-9 forms and provide the required documents to Polaris Fire Protection.',
         btnContinue: 'Continue \u2192',
         btnBack: '\u2190 Back',
         btnSubmit: 'Generate PDF & Submit',
@@ -584,7 +571,10 @@
         pill2: ' Confidencial',
         pill3: ' Reglas de Trabajo',
         pill4: ' Protecci\u00f3n Ca\u00eddas',
-        pill5: ' W-4 y I-9',
+        certColType: 'Tipo y/o Clase',
+        certColNumber: 'N\u00famero de Licencia / Certificaci\u00f3n',
+        certColExp: 'Fecha de Vencimiento',
+        certColGranted: 'Otorgado Por (Junta o Comisi\u00f3n, Estado)',
         step0Title: 'Solicitud de Empleo',
         step0Desc: 'Complete la solicitud a continuaci\u00f3n. Los campos marcados con * son obligatorios.',
         step1Title: 'Hoja de Informaci\u00f3n del Nuevo Empleado',
@@ -595,8 +585,6 @@
         step3Desc: 'Por favor lea las 30 reglas de trabajo a continuaci\u00f3n y luego reconozca al final.',
         step4Title: 'Lista de Verificaci\u00f3n de Capacitaci\u00f3n en Protecci\u00f3n contra Ca\u00eddas',
         step4Desc: 'Confirme cada elemento a continuaci\u00f3n sobre su capacitaci\u00f3n en protecci\u00f3n contra ca\u00eddas.',
-        step5Title: 'Formularios W-4 y I-9',
-        step5Desc: 'La ley federal exige estos formularios gubernamentales. Haga clic a continuaci\u00f3n para abrirlos. RR.HH. le ayudar\u00e1 a completarlos.',
         secPositionInfo: 'Informaci\u00f3n del Puesto',
         secPersonalInfo: 'Informaci\u00f3n Personal',
         secEducation: 'Educaci\u00f3n',
@@ -635,7 +623,6 @@
         lblStartDate: 'Fecha de inicio',
         lblEndDate: 'Fecha de fin',
         lblDutiesReason: 'Funciones y Raz\u00f3n de Salida',
-        lblCertList: 'Liste licencias, certificaciones o niveles NICET relevantes',
         lblAddlNotes: '\u00bfAlgo m\u00e1s que quiera que sepamos?',
         appCertifyText: 'Certifico que la informaci\u00f3n proporcionada en esta solicitud es verdadera y completa a mi leal saber y entender.',
         lblHomePhone: 'Tel\u00e9fono Casa',
@@ -662,9 +649,6 @@
         lblTo: 'Hasta',
         lblMedicalQ: '\u00bfAlguna condici\u00f3n m\u00e9dica pertinente para tratamiento de emergencia?',
         wrAckText: 'He le\u00eddo y entendido las reglas de trabajo anteriores y acepto cumplirlas.',
-        w4Subtitle: 'Certificado de Retenciones del Empleado (PDF rellenable)',
-        i9Subtitle: 'Verificaci\u00f3n de Elegibilidad de Empleo (PDF rellenable)',
-        govAckText: 'Entiendo que debo completar los formularios W-4 y I-9 y proporcionar los documentos requeridos a Polaris Fire Protection.',
         btnContinue: 'Continuar \u2192',
         btnBack: '\u2190 Atr\u00e1s',
         btnSubmit: 'Generar PDF y Enviar',
@@ -940,9 +924,27 @@
         y += 3;
 
         header('Certifications & Licenses');
-        const certLines = doc.splitTextToSize(d.app_certifications || 'None listed', pw);
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
-        certLines.forEach(l => { doc.text(l, M, y); y += 5; if (y > 260) { doc.addPage(); y = 18; } });
+        // Table header
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
+        const colW = [pw * 0.25, pw * 0.25, pw * 0.2, pw * 0.3];
+        const colX = [M, M + colW[0], M + colW[0] + colW[1], M + colW[0] + colW[1] + colW[2]];
+        const certHeaders = ['Type / Class', 'License / Cert #', 'Exp. Date', 'Granted By'];
+        const rh = 6;
+        doc.setFillColor(240, 240, 240);
+        doc.rect(M, y - 4, pw, rh, 'F');
+        certHeaders.forEach((h, i) => { doc.text(h, colX[i] + 1, y); });
+        y += rh - 1;
+        doc.setFont('helvetica', 'normal');
+        for (let i = 1; i <= 5; i++) {
+          if (d['cert_type_' + i] || d['cert_num_' + i]) {
+            doc.text(String(d['cert_type_' + i] || ''), colX[0] + 1, y);
+            doc.text(String(d['cert_num_' + i] || ''), colX[1] + 1, y);
+            doc.text(String(d['cert_exp_' + i] || ''), colX[2] + 1, y);
+            doc.text(String(d['cert_granted_' + i] || ''), colX[3] + 1, y);
+            y += 5;
+            if (y > 260) { doc.addPage(); y = 18; }
+          }
+        }
         y += 3;
 
         header('Additional Notes');
@@ -1112,27 +1114,6 @@
         doc.setFontSize(8);
         doc.setTextColor(100);
         doc.text('Signature: ________________________________   Date: ' + today, M, y);
-
-        // ===== PAGE 5: W-4 / I-9 Acknowledgment =====
-        doc.addPage(); y = 15;
-        pageHeader('W-4 & I-9 ACKNOWLEDGMENT');
-
-        doc.setFontSize(10);
-        doc.setTextColor(34, 34, 34);
-        y += 5;
-        const ackText = 'I, ' + (d.ne_firstName || '') + ' ' + (d.ne_lastName || '') + ', understand that I must complete the IRS Form W-4 (Employee\'s Withholding Certificate) and USCIS Form I-9 (Employment Eligibility Verification) and provide the required identification documents to Polaris Fire Protection.';
-        const ackLines = doc.splitTextToSize(ackText, pw);
-        doc.text(ackLines, M, y);
-        y += ackLines.length * 5 + 10;
-
-        doc.text('Acknowledged: ' + (d.gov_acknowledge ? 'Yes' : 'No'), M, y);
-        y += 15;
-
-        doc.setFontSize(8);
-        doc.setTextColor(100);
-        doc.text('Signature: ________________________________   Date: ' + today, M, y);
-        y += 15;
-        doc.text('Name: ' + (d.ne_firstName || '') + ' ' + (d.ne_lastName || ''), M, y);
 
         // Save PDF
         const filename = 'NewHire_' + (d.ne_lastName || 'Employee') + '_' + (d.ne_firstName || '') + '_' + new Date().toISOString().slice(0,10) + '.pdf';
