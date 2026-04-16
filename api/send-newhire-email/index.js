@@ -33,11 +33,26 @@ module.exports = async function (context, req) {
 
   try {
     const data = req.body;
-    if (!data || !data.pdfBase64) {
+    if (!data || (!data.pdfBase64 && !data.attachments)) {
       context.res.status = 400;
       context.res.body = { success: false, error: 'Missing data' };
       return;
     }
+
+    // Support both single (legacy) and multiple attachments
+    const attachments = data.attachments
+      ? data.attachments.map(a => ({
+          '@odata.type': '#microsoft.graph.fileAttachment',
+          name: a.name,
+          contentBytes: a.base64,
+          contentType: a.contentType || 'application/pdf'
+        }))
+      : [{
+          '@odata.type': '#microsoft.graph.fileAttachment',
+          name: data.filename,
+          contentBytes: data.pdfBase64,
+          contentType: 'application/pdf'
+        }];
 
     // Get Graph token
     const tokenBody = querystring.stringify({
@@ -68,16 +83,12 @@ module.exports = async function (context, req) {
             '<p><strong>Applicant:</strong> ' + data.applicantName + '<br>' +
             '<strong>Position:</strong> ' + data.position + '<br>' +
             '<strong>Date:</strong> ' + data.date + '</p>' +
-            '<p>The completed PDF is attached to this email.</p>'
+            '<p>The completed PDFs are attached to this email.</p>'
         },
         toRecipients: [{ emailAddress: { address: TO_EMAIL } }],
+        ccRecipients: data.ccEmail ? [{ emailAddress: { address: data.ccEmail } }] : [],
         from: { emailAddress: { address: FROM_EMAIL, name: 'Polaris Fire Protection' } },
-        attachments: [{
-          '@odata.type': '#microsoft.graph.fileAttachment',
-          name: data.filename,
-          contentBytes: data.pdfBase64,
-          contentType: 'application/pdf'
-        }]
+        attachments: attachments
       },
       saveToSentItems: true
     });
