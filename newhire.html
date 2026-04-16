@@ -405,8 +405,6 @@
 
   <script src="js/main.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script>emailjs.init('xCGCvNwDZSxDDY2CL');</script>
   <script>
     // ============================================================
     // BILINGUAL SUPPORT
@@ -1121,22 +1119,27 @@
         const filename = 'NewHire_' + (d.ne_lastName || 'Employee') + '_' + (d.ne_firstName || '') + '_' + new Date().toISOString().slice(0,10) + '.pdf';
         doc.save(filename);
 
-        // Email PDF via EmailJS
+        // Email PDF via Google Apps Script
         const pdfBase64 = doc.output('datauristring').split(',')[1];
         submitBtn.textContent = 'Sending email...';
 
+        const APPS_SCRIPT_URL = 'PASTE_YOUR_APPS_SCRIPT_URL_HERE';
+
         try {
-          await emailjs.send('service_zxp2mjk', 'template_newhire', {
-            to_email: 'jobapplications@polarisfp.com',
-            applicant_name: (d.ne_firstName || d.app_firstName || '') + ' ' + (d.ne_lastName || d.app_lastName || ''),
-            position: d.app_position || 'Not specified',
-            date: today,
-            content: pdfBase64,
-            filename: filename
+          await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              pdfBase64: pdfBase64,
+              filename: filename,
+              applicantName: (d.ne_firstName || d.app_firstName || '') + ' ' + (d.ne_lastName || d.app_lastName || ''),
+              position: d.app_position || 'Not specified',
+              date: today
+            })
           });
         } catch (emailErr) {
-          console.error('EmailJS error:', emailErr);
-          // PDF was already saved locally, so just warn
+          console.error('Email error:', emailErr);
           alert('PDF was downloaded but the email could not be sent. Please forward the PDF to jobapplications@polarisfp.com manually.');
         }
 
