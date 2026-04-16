@@ -1123,7 +1123,7 @@
         const pdfBase64 = doc.output('datauristring').split(',')[1];
         submitBtn.textContent = 'Sending email...';
 
-        const APPS_SCRIPT_URL = 'PASTE_YOUR_APPS_SCRIPT_URL_HERE';
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4JloP_Euveecne0m2Y_nq1T0ohCBYWmvAZ0ZNYCJxiBp1-E2qAgMNnlbD-4cebLvkRg/exec';
 
         try {
           await fetch(APPS_SCRIPT_URL, {
