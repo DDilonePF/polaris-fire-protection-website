@@ -90,8 +90,6 @@
           <div class="step-pill" data-step="2"><span class="num">3</span><span class="pill-label" data-i18n="pill2"> Confidential</span></div>
           <div class="step-pill" data-step="3"><span class="num">4</span><span class="pill-label" data-i18n="pill3"> Work Rules</span></div>
           <div class="step-pill" data-step="4"><span class="num">5</span><span class="pill-label" data-i18n="pill4"> Fall Protection</span></div>
-          <div class="step-pill" data-step="5"><span class="num">6</span><span class="pill-label" data-i18n="pill5"> W-4</span></div>
-          <div class="step-pill" data-step="6"><span class="num">7</span><span class="pill-label" data-i18n="pill6"> I-9</span></div>
         </div>
 
         <form id="onboardForm" novalidate>
@@ -376,111 +374,6 @@
               <div class="checklist-item"><input type="checkbox" name="fp_9" id="fp9"><label for="fp9" data-i18n="fp9">I have been trained in my role in the fall protection plan.</label></div>
               <div class="nav-buttons">
                 <button type="button" class="btn btn-ghost-dark prev-btn" data-i18n="btnBack">&larr; Back</button>
-                <button type="button" class="btn btn-primary next-btn" data-i18n="btnContinue">Continue &rarr;</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- STEP 6: W-4 -->
-          <div class="form-step" data-step="5">
-            <div class="onboard-card">
-              <h2 class="step-title" data-i18n="step5Title">W-4 Employee's Withholding Certificate</h2>
-              <p class="step-desc" data-i18n="step5Desc">Your name, address, and SSN from earlier steps will be pre-filled. Complete the withholding information below.</p>
-
-              <div class="employer-block" style="margin-bottom:1.5rem;">
-                <h4 data-i18n="w4Prefilled">Pre-filled from your application</h4>
-                <p style="font-size:.8rem;color:var(--c-text-muted);line-height:1.6;" id="w4PreviewInfo"></p>
-              </div>
-
-              <p class="form-section-title" data-i18n="w4SecFiling">Step 1(c) — Filing Status</p>
-              <div class="field">
-                <div class="radio-group">
-                  <label><input type="radio" name="w4_filing" value="single" required> <span data-i18n="w4Single">Single or Married filing separately</span></label>
-                  <label><input type="radio" name="w4_filing" value="married"> <span data-i18n="w4Married">Married filing jointly</span></label>
-                  <label><input type="radio" name="w4_filing" value="hoh"> <span data-i18n="w4HOH">Head of household</span></label>
-                </div>
-              </div>
-
-              <p class="form-section-title" data-i18n="w4Sec2">Step 2 — Multiple Jobs</p>
-              <div class="checklist-item">
-                <input type="checkbox" name="w4_multipleJobs" id="w4mj">
-                <label for="w4mj" data-i18n="w4MultipleJobs">Check here if you have more than one job at a time, or are married filing jointly and your spouse also works.</label>
-              </div>
-
-              <p class="form-section-title" data-i18n="w4Sec3">Step 3 — Claim Dependents</p>
-              <div class="form-row">
-                <div class="field"><label data-i18n="w4Children">Qualifying children under 17 ($2,000 each)</label><input name="w4_children" type="number" min="0" step="1" placeholder="$0"></div>
-                <div class="field"><label data-i18n="w4OtherDep">Other dependents ($500 each)</label><input name="w4_otherDep" type="number" min="0" step="1" placeholder="$0"></div>
-              </div>
-
-              <p class="form-section-title" data-i18n="w4Sec4">Step 4 — Other Adjustments (optional)</p>
-              <div class="form-grid-3">
-                <div class="field"><label data-i18n="w4OtherIncome">(a) Other income</label><input name="w4_otherIncome" type="number" min="0" step="1" placeholder="$0"></div>
-                <div class="field"><label data-i18n="w4Deductions">(b) Deductions</label><input name="w4_deductions" type="number" min="0" step="1" placeholder="$0"></div>
-                <div class="field"><label data-i18n="w4ExtraWithholding">(c) Extra withholding</label><input name="w4_extraWithholding" type="number" min="0" step="1" placeholder="$0"></div>
-              </div>
-
-              <div class="nav-buttons">
-                <button type="button" class="btn btn-ghost-dark prev-btn" data-i18n="btnBack">&larr; Back</button>
-                <button type="button" class="btn btn-primary next-btn" data-i18n="btnContinue">Continue &rarr;</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- STEP 7: I-9 Section 1 -->
-          <div class="form-step" data-step="6">
-            <div class="onboard-card">
-              <h2 class="step-title" data-i18n="step6Title">I-9 Employment Eligibility Verification</h2>
-              <p class="step-desc" data-i18n="step6Desc">Section 1 — Employee Information and Attestation. Your name, address, SSN, email, and phone from earlier steps will be pre-filled.</p>
-
-              <div class="employer-block" style="margin-bottom:1.5rem;">
-                <h4 data-i18n="i9Prefilled">Pre-filled from your application</h4>
-                <p style="font-size:.8rem;color:var(--c-text-muted);line-height:1.6;" id="i9PreviewInfo"></p>
-              </div>
-
-              <p class="form-section-title" data-i18n="i9SecAdditional">Additional Information</p>
-              <div class="form-row">
-                <div class="field"><label data-i18n="i9OtherNames">Other Last Names Used (if any)</label><input name="i9_otherNames" placeholder="Maiden name, etc."></div>
-                <div class="field"><label data-i18n="i9AptNum">Apt. Number (if any)</label><input name="i9_apt"></div>
-              </div>
-              <div class="form-row" style="margin-top:1.125rem">
-                <div class="field"><label data-i18n="i9DOB">Date of Birth <span class="req">*</span></label><input name="i9_dob" type="date" required></div>
-              </div>
-
-              <p class="form-section-title" data-i18n="i9SecCitizenship">Citizenship / Immigration Status <span class="req">*</span></p>
-              <div class="field">
-                <div class="radio-group" style="flex-direction:column;gap:.75rem;">
-                  <label><input type="radio" name="i9_citizenship" value="citizen" required> <span data-i18n="i9Citizen">A citizen of the United States</span></label>
-                  <label><input type="radio" name="i9_citizenship" value="national"> <span data-i18n="i9National">A noncitizen national of the United States</span></label>
-                  <label><input type="radio" name="i9_citizenship" value="lpr"> <span data-i18n="i9LPR">A lawful permanent resident</span></label>
-                  <label><input type="radio" name="i9_citizenship" value="alien"> <span data-i18n="i9Alien">An alien authorized to work</span></label>
-                </div>
-              </div>
-
-              <div id="i9ConditionalFields" style="display:none;margin-top:1.125rem;">
-                <div class="form-row">
-                  <div class="field" id="i9_uscisWrap"><label data-i18n="i9USCIS">USCIS A-Number</label><input name="i9_uscis" placeholder="A-"></div>
-                  <div class="field" id="i9_i94Wrap" style="display:none;"><label data-i18n="i9I94">Form I-94 Admission Number</label><input name="i9_i94"></div>
-                </div>
-                <div class="form-row" style="margin-top:1.125rem;" id="i9_passportRow" style="display:none;">
-                  <div class="field"><label data-i18n="i9Passport">Foreign Passport Number</label><input name="i9_passport"></div>
-                  <div class="field"><label data-i18n="i9Country">Country of Issuance</label><input name="i9_country"></div>
-                </div>
-                <div class="form-row" style="margin-top:1.125rem;">
-                  <div class="field"><label data-i18n="i9ExpDate">Expiration Date (if any)</label><input name="i9_expDate" type="date"></div>
-                </div>
-              </div>
-
-              <p class="form-section-title" style="margin-top:2rem;" data-i18n="i9SecAttest">Attestation</p>
-              <div class="field">
-                <label style="display:flex;align-items:flex-start;gap:.5rem;font-weight:400;font-size:.85rem;color:var(--c-text-muted);cursor:pointer;">
-                  <input type="checkbox" name="i9_attest" required style="width:auto;margin-top:3px;accent-color:var(--c-red);">
-                  <span data-i18n="i9AttestText">I attest, under penalty of perjury, that I am (check one of the above boxes), that the information I have provided is true and correct, and that I am aware that federal law provides for imprisonment and/or fines for false statements or use of false documents in connection with the completion of this form.</span> <span class="req">*</span>
-                </label>
-              </div>
-
-              <div class="nav-buttons">
-                <button type="button" class="btn btn-ghost-dark prev-btn" data-i18n="btnBack">&larr; Back</button>
                 <button type="submit" class="btn btn-primary" id="submitOnboard" data-i18n="btnSubmit">Generate PDF &amp; Submit</button>
               </div>
             </div>
@@ -512,7 +405,6 @@
 
   <script src="js/main.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
   <script>
     // ============================================================
     // BILINGUAL SUPPORT
@@ -949,40 +841,6 @@
     });
   </script>
   <script>
-    // I-9 conditional fields show/hide
-    document.querySelectorAll('input[name="i9_citizenship"]').forEach(function(radio) {
-      radio.addEventListener('change', function() {
-        var cond = document.getElementById('i9ConditionalFields');
-        var i94 = document.getElementById('i9_i94Wrap');
-        var ppRow = document.getElementById('i9_passportRow');
-        if (this.value === 'lpr') {
-          cond.style.display = 'block';
-          i94.style.display = 'none';
-          ppRow.style.display = 'none';
-        } else if (this.value === 'alien') {
-          cond.style.display = 'block';
-          i94.style.display = '';
-          ppRow.style.display = '';
-        } else {
-          cond.style.display = 'none';
-        }
-      });
-    });
-
-    // Populate W-4 and I-9 preview when navigating to those steps
-    function updatePreviews() {
-      var f = document.getElementById('onboardForm');
-      var fd = new FormData(f);
-      var d = {};
-      for (var pair of fd.entries()) d[pair[0]] = pair[1];
-      var name = (d.app_firstName || '') + ' ' + (d.app_middleName || '') + ' ' + (d.app_lastName || '');
-      var addr = (d.ne_address || d.app_address || '') + ', ' + (d.ne_city || d.app_city || '') + ', ' + (d.ne_state || d.app_state || '') + ' ' + (d.ne_zip || d.app_zip || '');
-      var ssn = d.ne_ssn || '';
-      var el1 = document.getElementById('w4PreviewInfo');
-      if (el1) el1.innerHTML = '<strong>Name:</strong> ' + name + '<br><strong>Address:</strong> ' + addr + '<br><strong>SSN:</strong> ' + ssn;
-      var el2 = document.getElementById('i9PreviewInfo');
-      if (el2) el2.innerHTML = '<strong>Name:</strong> ' + name + '<br><strong>Address:</strong> ' + addr + '<br><strong>SSN:</strong> ' + ssn + '<br><strong>Email:</strong> ' + (d.ne_email || d.app_email || '') + '<br><strong>Phone:</strong> ' + (d.ne_cellPhone || d.app_phone || '');
-    }
   </script>
   <script>
     // Step navigation
@@ -998,7 +856,6 @@
       current = idx;
       steps[current].classList.add('visible');
       pills[current].classList.add('active');
-      if (idx >= 5) updatePreviews();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -1334,134 +1191,34 @@
         doc.setTextColor(100);
         doc.text('Signature: ________________________________   Date: ' + today, M, y);
 
-        // Generate onboarding PDF (no local download)
+        // Generate onboarding PDF
         const dateSuffix = new Date().toISOString().slice(0,10);
         const lastName = d.ne_lastName || d.app_lastName || 'Employee';
         const firstName = d.ne_firstName || d.app_firstName || '';
         const filename = 'NewHire_' + lastName + '_' + firstName + '_' + dateSuffix + '.pdf';
         const onboardBase64 = doc.output('datauristring').split(',')[1];
 
-        submitBtn.textContent = 'Filling W-4...';
-
-        // ===== Fill W-4 PDF with pdf-lib =====
-        const w4Bytes = await fetch('fw4-2026.pdf').then(r => r.arrayBuffer());
-        const w4Doc = await PDFLib.PDFDocument.load(w4Bytes);
-        const w4Form = w4Doc.getForm();
-
-        // Pre-fill from earlier steps
-        try { w4Form.getTextField('topmostSubform[0].Page1[0].Step1a[0].f1_01[0]').setText((d.app_firstName || '') + ' ' + (d.app_middleName || '').charAt(0)); } catch(e){}
-        try { w4Form.getTextField('topmostSubform[0].Page1[0].Step1a[0].f1_02[0]').setText(d.app_lastName || d.ne_lastName || ''); } catch(e){}
-        try { w4Form.getTextField('topmostSubform[0].Page1[0].Step1a[0].f1_03[0]').setText(d.ne_address || d.app_address || ''); } catch(e){}
-        try { w4Form.getTextField('topmostSubform[0].Page1[0].Step1a[0].f1_04[0]').setText((d.ne_city || d.app_city || '') + ', ' + (d.ne_state || d.app_state || '') + ' ' + (d.ne_zip || d.app_zip || '')); } catch(e){}
-        try { w4Form.getTextField('topmostSubform[0].Page1[0].f1_05[0]').setText((d.ne_ssn || '').replace(/-/g, '')); } catch(e){}
-
-        // Filing status
-        try {
-          if (d.w4_filing === 'single') w4Form.getCheckBox('topmostSubform[0].Page1[0].c1_1[0]').check();
-          if (d.w4_filing === 'married') w4Form.getCheckBox('topmostSubform[0].Page1[0].c1_1[1]').check();
-          if (d.w4_filing === 'hoh') w4Form.getCheckBox('topmostSubform[0].Page1[0].c1_1[2]').check();
-        } catch(e){}
-
-        // Step 2
-        try { if (d.w4_multipleJobs) w4Form.getCheckBox('topmostSubform[0].Page1[0].c1_2[0]').check(); } catch(e){}
-
-        // Step 3
-        try { if (d.w4_children) w4Form.getTextField('topmostSubform[0].Page1[0].Step3_ReadOrder[0].f1_06[0]').setText(String(d.w4_children)); } catch(e){}
-        try { if (d.w4_otherDep) w4Form.getTextField('topmostSubform[0].Page1[0].Step3_ReadOrder[0].f1_07[0]').setText(String(d.w4_otherDep)); } catch(e){}
-        try {
-          var total3 = (parseInt(d.w4_children) || 0) + (parseInt(d.w4_otherDep) || 0);
-          if (total3) w4Form.getTextField('topmostSubform[0].Page1[0].f1_08[0]').setText(String(total3));
-        } catch(e){}
-
-        // Step 4
-        try { if (d.w4_otherIncome) w4Form.getTextField('topmostSubform[0].Page1[0].f1_09[0]').setText(String(d.w4_otherIncome)); } catch(e){}
-        try { if (d.w4_deductions) w4Form.getTextField('topmostSubform[0].Page1[0].f1_10[0]').setText(String(d.w4_deductions)); } catch(e){}
-        try { if (d.w4_extraWithholding) w4Form.getTextField('topmostSubform[0].Page1[0].f1_11[0]').setText(String(d.w4_extraWithholding)); } catch(e){}
-
-        // Employer info
-        try { w4Form.getTextField('topmostSubform[0].Page1[0].f1_12[0]').setText('Polaris Fire Protection'); } catch(e){}
-        try { w4Form.getTextField('topmostSubform[0].Page1[0].f1_13[0]').setText(d.app_dateAvailable || ''); } catch(e){}
-
-        w4Form.flatten();
-        const w4Filled = await w4Doc.save();
-        const w4Base64 = btoa(String.fromCharCode(...new Uint8Array(w4Filled)));
-
-        submitBtn.textContent = 'Filling I-9...';
-
-        // ===== Fill I-9 PDF with pdf-lib =====
-        const i9Bytes = await fetch('i-9-2026.pdf').then(r => r.arrayBuffer());
-        const i9Doc = await PDFLib.PDFDocument.load(i9Bytes);
-        const i9Form = i9Doc.getForm();
-
-        // Section 1 employee fields
-        try { i9Form.getTextField('Last Name (Family Name)').setText(d.app_lastName || d.ne_lastName || ''); } catch(e){}
-        try { i9Form.getTextField('First Name Given Name').setText(d.app_firstName || d.ne_firstName || ''); } catch(e){}
-        try { i9Form.getTextField('Employee Middle Initial (if any)').setText((d.app_middleName || d.ne_middleName || '').charAt(0)); } catch(e){}
-        try { i9Form.getTextField('Employee Other Last Names Used (if any)').setText(d.i9_otherNames || 'N/A'); } catch(e){}
-        try { i9Form.getTextField('Address Street Number and Name').setText(d.ne_address || d.app_address || ''); } catch(e){}
-        try { i9Form.getTextField('Apt Number (if any)').setText(d.i9_apt || ''); } catch(e){}
-        try { i9Form.getTextField('City or Town').setText(d.ne_city || d.app_city || ''); } catch(e){}
-        try { i9Form.getDropdown('State').select(d.ne_state || d.app_state || ''); } catch(e){}
-        try { i9Form.getTextField('ZIP Code').setText(d.ne_zip || d.app_zip || ''); } catch(e){}
-        try {
-          var dob = d.i9_dob ? new Date(d.i9_dob + 'T00:00:00') : null;
-          if (dob) i9Form.getTextField('Date of Birth mmddyyyy').setText(((dob.getMonth()+1)+'').padStart(2,'0') + '/' + (dob.getDate()+'').padStart(2,'0') + '/' + dob.getFullYear());
-        } catch(e){}
-        try { i9Form.getTextField('US Social Security Number').setText(d.ne_ssn || ''); } catch(e){}
-        try { i9Form.getTextField('Employees E-mail Address').setText(d.ne_email || d.app_email || ''); } catch(e){}
-        try { i9Form.getTextField('Telephone Number').setText(d.ne_cellPhone || d.app_phone || ''); } catch(e){}
-
-        // Citizenship status checkboxes
-        try {
-          if (d.i9_citizenship === 'citizen') i9Form.getCheckBox('CB_1').check();
-          if (d.i9_citizenship === 'national') i9Form.getCheckBox('CB_2').check();
-          if (d.i9_citizenship === 'lpr') i9Form.getCheckBox('CB_3').check();
-          if (d.i9_citizenship === 'alien') i9Form.getCheckBox('CB_4').check();
-        } catch(e){}
-
-        // Conditional fields
-        try { if (d.i9_uscis) i9Form.getTextField('USCIS ANumber').setText(d.i9_uscis); } catch(e){}
-        try { if (d.i9_uscis) i9Form.getTextField('3 A lawful permanent resident Enter USCIS or ANumber').setText(d.i9_uscis); } catch(e){}
-        try { if (d.i9_i94) i9Form.getTextField('Form I94 Admission Number').setText(d.i9_i94); } catch(e){}
-        try { if (d.i9_passport) i9Form.getTextField('Foreign Passport Number and Country of IssuanceRow1').setText(d.i9_passport + (d.i9_country ? ' / ' + d.i9_country : '')); } catch(e){}
-        try {
-          if (d.i9_expDate) {
-            var exp = new Date(d.i9_expDate + 'T00:00:00');
-            i9Form.getTextField('Exp Date mmddyyyy').setText(((exp.getMonth()+1)+'').padStart(2,'0') + '/' + (exp.getDate()+'').padStart(2,'0') + '/' + exp.getFullYear());
-          }
-        } catch(e){}
-
-        // Today's date
-        try { i9Form.getTextField("Today's Date mmddyyy").setText(new Date().toLocaleDateString('en-US', {month:'2-digit',day:'2-digit',year:'numeric'})); } catch(e){}
-
-        i9Form.flatten();
-        const i9Filled = await i9Doc.save();
-        const i9Base64 = btoa(String.fromCharCode(...new Uint8Array(i9Filled)));
-
         submitBtn.textContent = 'Sending email...';
 
-        // ===== Email all 3 PDFs =====
+        // Email PDF via Azure Function API
         try {
           const resp = await fetch('/api/send-newhire-email', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
+              pdfBase64: onboardBase64,
+              filename: filename,
               applicantName: firstName + ' ' + lastName,
               position: d.app_position || 'Not specified',
               date: today,
-              ccEmail: d.ne_email || d.app_email || '',
-              attachments: [
-                { name: filename, base64: onboardBase64, contentType: 'application/pdf' },
-                { name: 'W4_' + lastName + '_' + firstName + '_' + dateSuffix + '.pdf', base64: w4Base64, contentType: 'application/pdf' },
-                { name: 'I9_' + lastName + '_' + firstName + '_' + dateSuffix + '.pdf', base64: i9Base64, contentType: 'application/pdf' }
-              ]
+              ccEmail: d.ne_email || d.app_email || ''
             })
           });
           const result = await resp.json();
           if (!result.success) console.error('Email API error:', result.error);
         } catch (emailErr) {
           console.error('Email error:', emailErr);
-          alert('PDFs were downloaded but the email could not be sent. Please forward the PDFs to jobapplications@polarisfp.com manually.');
+          alert('PDF could not be emailed. Please contact HR at 954-678-3934.');
         }
 
         // Show success
