@@ -223,8 +223,9 @@
                 <div class="field"><label data-i18n="lblHomePhone">Home Phone</label><input name="ne_homePhone" type="tel"></div>
                 <div class="field"><label data-i18n="lblCellPhone">Cell Phone <span class="req">*</span></label><input name="ne_cellPhone" type="tel" required></div>
               </div>
-              <div class="form-row" style="margin-top:1.125rem">
+              <div class="form-grid-3" style="margin-top:1.125rem">
                 <div class="field"><label data-i18n="lblEmail">Email <span class="req">*</span></label><input name="ne_email" type="email" required></div>
+                <div class="field"><label data-i18n="lblDOB">Date of Birth <span class="req">*</span></label><input name="ne_dob" type="date" required></div>
                 <div class="field"><label data-i18n="lblSSN">Social Security Number <span class="req">*</span></label><input name="ne_ssn" required placeholder="XXX-XX-XXXX" autocomplete="off"></div>
               </div>
               <div class="form-grid-3" style="margin-top:1.125rem">
@@ -514,6 +515,7 @@
         lblHomePhone: 'Home Phone',
         lblCellPhone: 'Cell Phone *',
         lblSSN: 'Social Security Number *',
+        lblDOB: 'Date of Birth *',
         lblDLNum: "Driver's License #",
         lblDLState: 'DL State',
         lblDLExp: 'DL Expiration',
@@ -702,6 +704,7 @@
         lblHomePhone: 'Tel\u00e9fono Casa',
         lblCellPhone: 'Tel\u00e9fono Celular *',
         lblSSN: 'N\u00famero de Seguro Social *',
+        lblDOB: 'Fecha de Nacimiento *',
         lblDLNum: 'Licencia de Conducir #',
         lblDLState: 'Estado de Licencia',
         lblDLExp: 'Vencimiento de Licencia',
@@ -1039,6 +1042,7 @@
         row('Home Phone', d.ne_homePhone);
         row('Cell Phone', d.ne_cellPhone);
         row('Email', d.ne_email);
+        row('Date of Birth', d.ne_dob);
         row('SSN', d.ne_ssn);
         row("Driver's License", (d.ne_dl || 'N/A') + '  State: ' + (d.ne_dlState || 'N/A') + '  Exp: ' + (d.ne_dlExp || 'N/A'));
         y += 3;
