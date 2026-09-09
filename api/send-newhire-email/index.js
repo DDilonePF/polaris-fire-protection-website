@@ -23,6 +23,15 @@ function httpReq(url, method, headers, body) {
   });
 }
 
+// Escape user-supplied values before they go into the HTML mail body
+const esc = v => String(v == null ? '' : v)
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;');
+
+// Escape, then turn newlines into line breaks (split/join avoids regex escaping)
+const nl2br = v => esc(v).split('\r').join('').split('\n').join('<br>');
+
 module.exports = async function (context, req) {
   context.res = { headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' } };
 
@@ -33,26 +42,67 @@ module.exports = async function (context, req) {
 
   try {
     const data = req.body;
-    if (!data || (!data.pdfBase64 && !data.attachments)) {
+
+    // A submission is valid if it carries an attachment or a message body.
+    // The contact form sends only a message, the other forms send a PDF.
+    const hasAttachment = !!(data && (data.pdfBase64 || (data.attachments && data.attachments.length)));
+    const hasMessage    = !!(data && data.message);
+    if (!data || (!hasAttachment && !hasMessage)) {
       context.res.status = 400;
       context.res.body = { success: false, error: 'Missing data' };
       return;
     }
 
-    // Support both single (legacy) and multiple attachments
-    const attachments = data.attachments
-      ? data.attachments.map(a => ({
-          '@odata.type': '#microsoft.graph.fileAttachment',
-          name: a.name,
-          contentBytes: a.base64,
-          contentType: a.contentType || 'application/pdf'
-        }))
-      : [{
-          '@odata.type': '#microsoft.graph.fileAttachment',
-          name: data.filename,
-          contentBytes: data.pdfBase64,
-          contentType: 'application/pdf'
-        }];
+    // Support multiple attachments, a single (legacy) attachment, or none at all
+    let attachments = [];
+    if (data.attachments && data.attachments.length) {
+      attachments = data.attachments.map(a => ({
+        '@odata.type': '#microsoft.graph.fileAttachment',
+        name: a.name,
+        contentBytes: a.base64,
+        contentType: a.contentType || 'application/pdf'
+      }));
+    } else if (data.pdfBase64) {
+      attachments = [{
+        '@odata.type': '#microsoft.graph.fileAttachment',
+        name: data.filename,
+        contentBytes: data.pdfBase64,
+        contentType: 'application/pdf'
+      }];
+    }
+
+    // Subject and body vary by which form submitted. Callers that send no
+    // formType keep the original onboarding wording.
+    const formType = data.formType || 'newhire';
+    const name = data.applicantName || data.fromName || 'Unknown';
+    let subject;
+    let content;
+
+    if (formType === 'contact') {
+      subject = 'Website Contact - ' + (data.subject || 'Website Contact') + ' - ' + name;
+      content = '<p>A message was submitted through the website contact form.</p>' +
+        '<p><strong>Name:</strong> ' + esc(name) + '<br>' +
+        '<strong>Email:</strong> ' + esc(data.fromEmail) + '<br>' +
+        '<strong>Phone:</strong> ' + esc(data.phone) + '<br>' +
+        '<strong>Subject:</strong> ' + esc(data.subject) + '</p>' +
+        '<p><strong>Message:</strong><br>' + nl2br(data.message) + '</p>';
+    } else if (formType === 'application') {
+      subject = 'Employment Application - ' + name + ' - ' + (data.position || 'Not specified');
+      content = '<p>An employment application has been submitted.</p>' +
+        '<p><strong>Applicant:</strong> ' + esc(name) + '<br>' +
+        '<strong>Position:</strong> ' + esc(data.position) + '<br>' +
+        '<strong>Email:</strong> ' + esc(data.fromEmail) + '<br>' +
+        '<strong>Phone:</strong> ' + esc(data.phone) + '<br>' +
+        '<strong>Date:</strong> ' + esc(data.date) + '</p>' +
+        '<p>The completed application is attached as a PDF.</p>';
+    } else {
+      subject = 'New Hire Application - ' + name + ' - ' + (data.position || '');
+      content = '<p>A new hire onboarding packet has been submitted.</p>' +
+        '<p><strong>Applicant:</strong> ' + esc(name) + '<br>' +
+        '<strong>Position:</strong> ' + esc(data.position) + '<br>' +
+        '<strong>Date:</strong> ' + esc(data.date) + '</p>' +
+        '<p>The completed PDFs are attached to this email.</p>';
+    }
 
     // Get Graph token
     const tokenBody = querystring.stringify({
@@ -76,17 +126,11 @@ module.exports = async function (context, req) {
     // Send email via Graph API
     const mail = JSON.stringify({
       message: {
-        subject: 'New Hire Application - ' + data.applicantName + ' - ' + data.position,
-        body: {
-          contentType: 'HTML',
-          content: '<p>A new hire onboarding packet has been submitted.</p>' +
-            '<p><strong>Applicant:</strong> ' + data.applicantName + '<br>' +
-            '<strong>Position:</strong> ' + data.position + '<br>' +
-            '<strong>Date:</strong> ' + data.date + '</p>' +
-            '<p>The completed PDFs are attached to this email.</p>'
-        },
+        subject: subject,
+        body: { contentType: 'HTML', content: content },
         toRecipients: [{ emailAddress: { address: TO_EMAIL } }],
         ccRecipients: data.ccEmail ? [{ emailAddress: { address: data.ccEmail } }] : [],
+        replyTo: data.fromEmail ? [{ emailAddress: { address: data.fromEmail } }] : [],
         from: { emailAddress: { address: FROM_EMAIL, name: 'Polaris Fire Protection' } },
         attachments: attachments
       },
