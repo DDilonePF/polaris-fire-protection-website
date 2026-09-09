@@ -1204,7 +1204,9 @@
 
         submitBtn.textContent = 'Sending email...';
 
-        // Email PDF via Azure Function API
+        // Email PDF via Azure Function API. The success screen is only shown
+        // once the server confirms delivery, otherwise a lost packet would
+        // look submitted to the new hire.
         try {
           const resp = await fetch('/api/send-newhire-email', {
             method: 'POST',
@@ -1214,15 +1216,31 @@
               filename: filename,
               applicantName: firstName + ' ' + lastName,
               position: d.app_position || 'Not specified',
+              phone: d.app_phone || '',
+              fromEmail: d.ne_email || d.app_email || '',
               date: today,
               ccEmail: d.ne_email || d.app_email || ''
             })
           });
-          const result = await resp.json();
-          if (!result.success) console.error('Email API error:', result.error);
+          const result = await resp.json().catch(() => ({}));
+          if (!resp.ok || !result.success) throw new Error(result.error || 'Send failed');
         } catch (emailErr) {
           console.error('Email error:', emailErr);
-          alert('PDF could not be emailed. Please contact HR at 954-678-3934.');
+          submitBtn.disabled = false;
+          submitBtn.textContent = currentLang === 'es' ? 'Generar PDF y Enviar' : 'Generate PDF & Submit';
+
+          // Hand the new hire their completed packet so the work is not lost.
+          let saved = false;
+          try { doc.save(filename); saved = true; } catch (saveErr) { /* download blocked */ }
+
+          alert(currentLang === 'es'
+            ? (saved
+              ? 'No pudimos enviar su paquete. Se descargo un PDF con sus documentos completos. Por favor envielo a jobapplications@polarisfp.com o llame a RR.HH. al 954-678-3934.'
+              : 'No pudimos enviar su paquete. Intente de nuevo o llame a RR.HH. al 954-678-3934.')
+            : (saved
+              ? 'We could not submit your packet. A PDF of your completed documents has been downloaded. Please email it to jobapplications@polarisfp.com or call HR at 954-678-3934.'
+              : 'We could not submit your packet. Please try again or call HR at 954-678-3934.'));
+          return;
         }
 
         // Show success
