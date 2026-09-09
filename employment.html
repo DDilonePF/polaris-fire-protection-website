@@ -660,94 +660,191 @@
   </footer>
 
   <script src="js/main.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script>emailjs.init('xCGCvNwDZSxDDY2CL');</script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
   <script>
     // ============================================================
-    // Plain-text EmailJS submission (no encryption needed)
-    //
-    // HOW TO SET UP:
-    // 1. Create a free EmailJS account at https://www.emailjs.com
-    // 2. Add an email service (Gmail, Outlook, etc.)
-    // 3. Create a template with variables: {{applicant_name}}, {{position}}, {{application_text}}
-    // 4. Set the template "To Email" to JobApps@polarisfp.com
-    // 5. Replace the 3 IDs below
+    // The application is rendered to a PDF in the browser, then posted to the
+    // Azure Function at /api/send-newhire-email, which mails it through
+    // Microsoft Graph. Same backend the new hire onboarding flow uses.
     // ============================================================
-    const EMAILJS_SERVICE_ID  = 'service_zxp2mjk';
-    const EMAILJS_TEMPLATE_ID = 'template_ouo0do3';
+    const API_ENDPOINT = '/api/send-newhire-email';
 
     const appForm  = document.getElementById('applicationForm');
     const submitBtn = document.getElementById('submitAppBtn');
     const successDiv = document.getElementById('appSuccess');
 
     if (appForm) {
+      // Render the completed application to a PDF, matching the layout used by
+      // the new hire onboarding packet so both arrive looking the same.
+      function buildApplicationPdf(d) {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF('p', 'mm', 'letter');
+        const W = 215.9;
+        const M = 18;              // margin
+        const pw = W - M * 2;      // printable width
+        let y = 15;
+        const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        function pageBreak() {
+          if (y > 255) { doc.addPage(); y = 18; }
+        }
+
+        function header(title) {
+          pageBreak();
+          doc.setFillColor(204, 41, 54);
+          doc.rect(M, y, pw, 0.5, 'F');
+          y += 4;
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(11);
+          doc.setTextColor(204, 41, 54);
+          doc.text(title.toUpperCase(), M, y);
+          y += 6;
+          doc.setTextColor(34, 34, 34);
+        }
+
+        function row(label, value, indent) {
+          const x = indent ? M + 4 : M;
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(9);
+          doc.text(label + ':', x, y);
+          doc.setFont('helvetica', 'normal');
+          const offset = doc.getTextWidth(label + ':  ');
+          const wrapped = doc.splitTextToSize(String(value || 'N/A'), pw - offset - (indent ? 4 : 0));
+          doc.text(wrapped, x + offset, y);
+          y += wrapped.length * 4.5 + 0.5;
+          pageBreak();
+        }
+
+        function block(value) {
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(9);
+          const wrapped = doc.splitTextToSize(String(value || 'N/A'), pw);
+          wrapped.forEach(line => {
+            doc.text(line, M, y);
+            y += 4.5;
+            pageBreak();
+          });
+        }
+
+        // Letterhead
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(16);
+        doc.setTextColor(204, 41, 54);
+        doc.text('POLARIS FIRE PROTECTION', W / 2, y, { align: 'center' });
+        y += 6;
+        doc.setFontSize(10);
+        doc.setTextColor(100, 100, 100);
+        doc.text('EMPLOYMENT APPLICATION', W / 2, y, { align: 'center' });
+        y += 4;
+        doc.setFontSize(8);
+        doc.text('4009 SW 7th St, Plantation FL 33317', W / 2, y, { align: 'center' });
+        y += 4;
+        doc.text('Submitted: ' + d.submittedAt, W / 2, y, { align: 'center' });
+        y += 8;
+        doc.setTextColor(34, 34, 34);
+
+        header('Position Information');
+        row('Position', d.position);
+        row('Date Available', d.dateAvailable);
+        row('Employment Type', d.empType);
+        row('Department', d.dept);
+        y += 3;
+
+        header('Personal Information');
+        row('Name', (d.firstName || '') + ' ' + (d.middleName || '') + ' ' + (d.lastName || ''));
+        row('Address', (d.address || '') + ', ' + (d.city || '') + ', ' + (d.state || '') + ' ' + (d.zip || ''));
+        row('Phone', d.phone);
+        row('Email', d.email);
+        row('Work Authorization', d.workAuth);
+        y += 3;
+
+        header('Education');
+        row('Level', d.education);
+        row('School', d.schoolName);
+        y += 3;
+
+        header('Employment History');
+        row('Previously at Polaris', d.prevPolaris);
+        y += 2;
+        row('Employer 1', d.emp1_name);
+        row('Title', d.emp1_title, true);
+        row('Dates', (d.emp1_start || '') + ' to ' + (d.emp1_end || ''), true);
+        row('Duties / Reason for Leaving', d.emp1_duties, true);
+        y += 2;
+        row('Employer 2', d.emp2_name);
+        row('Title', d.emp2_title, true);
+        row('Dates', (d.emp2_start || '') + ' to ' + (d.emp2_end || ''), true);
+        row('Duties / Reason for Leaving', d.emp2_duties, true);
+        y += 3;
+
+        header('Certifications');
+        block(d.certifications || 'None listed');
+        y += 3;
+
+        header('Resume');
+        block(d.resume || 'Not provided');
+        y += 3;
+
+        header('Additional Notes');
+        block(d.notes || 'None');
+        y += 6;
+
+        header('Certification');
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        const certLine = (d.certify ? '[X]' : '[ ]') +
+          '  Applicant certified that the information provided is true and complete.';
+        doc.text(doc.splitTextToSize(certLine, pw), M, y);
+        y += 10;
+        pageBreak();
+        doc.setFontSize(8);
+        doc.setTextColor(100);
+        doc.text('Signature: ________________________________   Date: ' + today, M, y);
+
+        const dateSuffix = new Date().toISOString().slice(0, 10);
+        const filename = 'Application_' + (d.lastName || 'Applicant') + '_' +
+          (d.firstName || '') + '_' + dateSuffix + '.pdf';
+
+        return { doc, filename, today };
+      }
+
       appForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!appForm.checkValidity()) { appForm.reportValidity(); return; }
 
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Sending...';
+        submitBtn.textContent = currentLang === 'es' ? 'Enviando...' : 'Sending...';
 
+        let built = null;
         try {
           const fd = new FormData(appForm);
           const data = {};
           for (const [k, v] of fd.entries()) data[k] = v;
           data.submittedAt = new Date().toLocaleString();
 
-          // Build readable text for the email body
-          const lines = [];
-          lines.push('EMPLOYMENT APPLICATION');
-          lines.push('Submitted: ' + data.submittedAt);
-          lines.push('');
-          lines.push('POSITION');
-          lines.push('Position: ' + (data.position || ''));
-          lines.push('Date Available: ' + (data.dateAvailable || ''));
-          lines.push('Type: ' + (data.empType || ''));
-          lines.push('Department: ' + (data.dept || ''));
-          lines.push('');
-          lines.push('PERSONAL INFORMATION');
-          lines.push('Name: ' + (data.firstName || '') + ' ' + (data.middleName || '') + ' ' + (data.lastName || ''));
-          lines.push('Address: ' + (data.address || '') + ', ' + (data.city || '') + ', ' + (data.state || '') + ' ' + (data.zip || ''));
-          lines.push('Phone: ' + (data.phone || ''));
-          lines.push('Email: ' + (data.email || ''));
-          lines.push('Work Authorization: ' + (data.workAuth || ''));
-          lines.push('');
-          lines.push('EDUCATION');
-          lines.push('Level: ' + (data.education || ''));
-          lines.push('School: ' + (data.schoolName || ''));
-          lines.push('');
-          lines.push('EMPLOYMENT HISTORY');
-          lines.push('Previously at Polaris: ' + (data.prevPolaris || ''));
-          lines.push('');
-          lines.push('Employer 1: ' + (data.emp1_name || ''));
-          lines.push('Title: ' + (data.emp1_title || ''));
-          lines.push('Dates: ' + (data.emp1_start || '') + ' to ' + (data.emp1_end || ''));
-          lines.push('Duties/Reason for Leaving: ' + (data.emp1_duties || ''));
-          lines.push('');
-          lines.push('Employer 2: ' + (data.emp2_name || ''));
-          lines.push('Title: ' + (data.emp2_title || ''));
-          lines.push('Dates: ' + (data.emp2_start || '') + ' to ' + (data.emp2_end || ''));
-          lines.push('Duties/Reason for Leaving: ' + (data.emp2_duties || ''));
-          lines.push('');
-          lines.push('CERTIFICATIONS');
-          lines.push(data.certifications || 'None listed');
-          lines.push('');
-          lines.push('RESUME');
-          lines.push(data.resume || 'Not provided');
-          lines.push('');
-          lines.push('ADDITIONAL NOTES');
-          lines.push(data.notes || 'None');
+          built = buildApplicationPdf(data);
+          const pdfBase64 = built.doc.output('datauristring').split(',')[1];
 
-          const emailParams = {
-            applicant_name: (data.firstName || '') + ' ' + (data.lastName || ''),
-            applicant_email: data.email || '',
-            applicant_phone: data.phone || '',
-            applicant_date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-            position: data.position || 'Not specified',
-            application_text: lines.join('\n')
-          };
+          const resp = await fetch(API_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              formType: 'application',
+              pdfBase64: pdfBase64,
+              filename: built.filename,
+              applicantName: ((data.firstName || '') + ' ' + (data.lastName || '')).trim(),
+              position: data.position || 'Not specified',
+              phone: data.phone || '',
+              fromEmail: data.email || '',
+              date: built.today,
+              ccEmail: data.email || ''
+            })
+          });
 
-          await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, emailParams);
+          // Only claim success once the server confirms it. A failed send must
+          // never show the success screen.
+          const result = await resp.json().catch(() => ({}));
+          if (!resp.ok || !result.success) throw new Error(result.error || 'Send failed');
 
           appForm.style.display = 'none';
           successDiv.style.display = 'block';
@@ -755,9 +852,20 @@
           console.error('Submission error:', err);
           submitBtn.disabled = false;
           submitBtn.textContent = currentLang === 'es' ? 'Enviar Solicitud' : 'Submit Application';
+
+          // Hand the applicant their completed application so the work is not
+          // lost, then tell them how to deliver it.
+          let saved = false;
+          if (built) {
+            try { built.doc.save(built.filename); saved = true; } catch (saveErr) { /* download blocked */ }
+          }
           alert(currentLang === 'es'
-            ? 'Hubo un error al enviar su solicitud. Intente de nuevo o descargue el PDF.'
-            : 'There was an error submitting your application. Please try again or download the PDF instead.');
+            ? (saved
+              ? 'No pudimos enviar su solicitud. Se descargo un PDF con su solicitud completa. Por favor enviela a jobapplications@polarisfp.com o llame al 954-678-3934.'
+              : 'Hubo un error al enviar su solicitud. Intente de nuevo o llame al 954-678-3934.')
+            : (saved
+              ? 'We could not submit your application. A PDF of your completed application has been downloaded. Please email it to jobapplications@polarisfp.com or call us at 954-678-3934.'
+              : 'There was an error submitting your application. Please try again or call us at 954-678-3934.'));
         }
       });
     }

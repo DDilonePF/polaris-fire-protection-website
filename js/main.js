@@ -69,13 +69,20 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.textContent = 'Sending...';
 
       try {
-        await emailjs.send('service_zxp2mjk', 'template_2sjv97i', {
-          from_name: (form.querySelector('#firstName')?.value || '') + ' ' + (form.querySelector('#lastName')?.value || ''),
-          from_email: form.querySelector('#email')?.value || '',
-          phone: form.querySelector('#phone')?.value || '',
-          subject: form.querySelector('#subject')?.value || 'Website Contact',
-          message: form.querySelector('#message')?.value || ''
+        const resp = await fetch('/api/send-newhire-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            formType: 'contact',
+            fromName: (form.querySelector('#firstName')?.value || '') + ' ' + (form.querySelector('#lastName')?.value || ''),
+            fromEmail: form.querySelector('#email')?.value || '',
+            phone: form.querySelector('#phone')?.value || '',
+            subject: form.querySelector('#subject')?.value || 'Website Contact',
+            message: form.querySelector('#message')?.value || ''
+          })
         });
+        const result = await resp.json().catch(() => ({}));
+        if (!resp.ok || !result.success) throw new Error(result.error || 'Send failed');
 
         btn.textContent = 'Message Sent!';
         btn.style.background = '#059669';
@@ -88,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
           form.reset();
         }, 3000);
       } catch (err) {
-        console.error('EmailJS error:', err);
+        console.error('Contact form error:', err);
         btn.textContent = orig;
         btn.disabled = false;
         alert('There was an error sending your message. Please try again or call us at 954-678-3934.');
