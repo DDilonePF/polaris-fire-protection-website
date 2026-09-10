@@ -26,7 +26,9 @@ Website/
   css/
     styles.css          Main stylesheet (DM Sans font, charcoal/red/blue color scheme)
   js/
-    main.js             Navigation, scroll effects, reveal animations, contact form EmailJS
+    main.js             Navigation, scroll effects, reveal animations, contact form submit
+  api/
+    send-newhire-email/ Azure Function: sends all form mail via Microsoft Graph
   images/
     logo.png            Polaris Fire Protection logo
     hero-bg.jpg         Homepage hero background (sprinkler head)
@@ -45,7 +47,8 @@ Website/
 ## Design Details
 
 ### Fonts
-- **DM Sans** (Google Fonts) weights: 400, 500, 600, 700, 800
+- **Barlow** (Google Fonts) weights: 400, 500, 600
+- **Barlow Condensed** (Google Fonts) weights: 400, 600, 700, 800 (headings)
 
 ### Color Palette (from logo)
 | Variable       | Value      | Usage                          |
@@ -80,7 +83,7 @@ Website/
 - Service cards (3-column grid) with images and SVG icons
 - Stats section (5 Locations, 24/7 Emergency, 100% Licensed, NFPA Compliant)
 - "Why Choose Polaris" section with checkmark list and photo
-- Contact form (sends via EmailJS)
+- Contact form (posts to /api/send-newhire-email)
 - Full footer with 4 columns
 
 ### About (about.html)
@@ -95,7 +98,7 @@ Website/
 - CTA banner
 
 ### Contact (contact.html)
-- Contact form (EmailJS to info@polarisfp.com)
+- Contact form (posts to /api/send-newhire-email, delivered to jobapplications@polarisfp.com)
 - All 5 office locations:
   - Polaris HQ, Plantation, FL (Alex Romero, aromero@polarisfp.com, 954-678-3934)
   - West Palm Beach, FL
@@ -107,61 +110,137 @@ Website/
 - 6 job postings with color-coded badges (Field/Engineering/Admin)
 - Online application form with English/Spanish language toggle
 - Form sections: Position Info, Personal Info, Education, Employment History (2 employers), Certifications, Resume, Additional Notes
-- Sends formatted email via EmailJS to JobApps@polarisfp.com
+- Renders the completed application to a PDF with jsPDF, then posts it to /api/send-newhire-email
+- On a failed send the PDF downloads so the applicant does not lose their work
 - Spanish translation built into the page (no separate page needed)
 
 ### New Hire Portal (newhire.html)
 - NOT linked from public navigation (accessed via direct URL only)
 - Has `noindex, nofollow` meta tag
 - 5-step wizard with progress pills:
-  1. Employee Information (personal, SSN, direct deposit, emergency contact, garnishments)
-  2. Confidential Information (voluntary EEO demographics, disability, veteran status)
-  3. Work Rules (all 30 rules displayed, must acknowledge)
-  4. Fall Protection Training Checklist (9 items)
-  5. W-4 & I-9 (links to official fillable PDFs from IRS and USCIS)
-- On submit, generates a multi-page PDF using jsPDF library
-- PDF contains 5 pages matching the original paper forms with Polaris header
+  1. Employment Application (same fields as employment.html, both employers required)
+  2. New Employee Information Sheet (personal, date of birth, SSN, direct deposit, emergency contact, garnishments)
+  3. Confidential Information Sheet (voluntary EEO demographics, disability, veteran status)
+  4. Work Rules (all 30 rules displayed, must acknowledge)
+  5. Fall Protection Training Checklist (9 items)
+- W-4 and I-9 are no longer steps in this form and are handled separately
+- On submit, generates a multi-page PDF using jsPDF, then posts it to /api/send-newhire-email
+- The success screen only appears once the server confirms delivery
+- On a failed send the PDF downloads so the new hire does not lose their work
 - PDF filename: NewHire_LastName_FirstName_YYYY-MM-DD.pdf
 
 ---
 
-## EmailJS Configuration
+## Forms & Email
 
-### Account
-- **Provider:** EmailJS (emailjs.com)
-- **Connected Email:** ddilone@polarisfp.com (Office 365)
-- **Public Key:** xCGCvNwDZSxDDY2CL
-- **Service ID:** service_zxp2mjk
+> **Changed 2026-09-09.** The site no longer uses EmailJS. Both EmailJS templates
+> were deleted from the account, which made every contact message and every
+> employment application fail silently with "template ID not found". All forms
+> now post to the Azure Function described below. The EmailJS account is unused
+> and can be cancelled.
 
-### Templates
+### Architecture
 
-| Template              | Template ID        | Sends To               | Purpose                |
-|-----------------------|-------------------|------------------------|------------------------|
-| Contact Form          | template_2sjv97i  | info@polarisfp.com     | Contact page inquiries |
-| Job Application       | template_ouo0do3  | JobApps@polarisfp.com  | Employment applications|
+All three public forms post JSON to a single Azure Function, which sends mail
+through the Microsoft Graph API using app-only client credentials. There is no
+third-party email service and no user OAuth grant to expire.
 
-### Contact Form Variables
-- `{{from_name}}` - Sender's full name
-- `{{from_email}}` - Sender's email
-- `{{phone}}` - Phone number
-- `{{subject}}` - Message subject
-- `{{message}}` - Message body
+```
+Browser form  ->  POST /api/send-newhire-email  ->  Microsoft Graph  ->  inbox
+```
 
-### Job Application Template Variables
-- `{{applicant_name}}` - Full name
-- `{{applicant_email}}` - Email (also used as Reply To)
-- `{{applicant_phone}}` - Phone
-- `{{applicant_date}}` - Submission date
-- `{{position}}` - Position applied for
-- `{{application_text}}` - Full application text
+| Form                   | Page(s)                  | Sends            | formType      |
+|------------------------|--------------------------|------------------|---------------|
+| Contact form           | index.html, contact.html | Message body     | `contact`     |
+| Employment application | employment.html          | PDF attachment   | `application` |
+| New hire onboarding    | newhire.html             | PDF attachment   | *(omitted)*   |
 
-### Job Application Template Format
-- Content Type: HTML
-- Formatted with Polaris header, red section dividers, table layout
-- Printable directly from email (Ctrl+P)
-- Reply To set to applicant's email
+All three deliver to the address in the `GRAPH_TO_EMAIL` app setting, currently
+`jobapplications@polarisfp.com`. The applicant's own address is set as both the
+CC and the reply-to, so replying reaches them directly.
 
----
+### The function
+
+**Location:** `api/send-newhire-email/index.js`
+**Route:** `POST /api/send-newhire-email` (anonymous auth, CORS open)
+
+Credentials come from Azure App Settings and are never in code:
+
+| App Setting           | Purpose                                    |
+|-----------------------|--------------------------------------------|
+| `GRAPH_TENANT_ID`     | Entra tenant                               |
+| `GRAPH_APP_ID`        | App registration client ID                 |
+| `GRAPH_CLIENT_SECRET` | Client secret                              |
+| `GRAPH_FROM_EMAIL`    | Sending mailbox (default jobapplications@) |
+| `GRAPH_TO_EMAIL`      | Destination inbox (default jobapplications@)|
+
+### Request fields
+
+A submission is accepted if it carries **either** an attachment **or** a message
+body. Anything else returns `400 {"success": false, "error": "Missing data"}`.
+
+| Field           | Used by            | Notes                                     |
+|-----------------|--------------------|-------------------------------------------|
+| `formType`      | all                | `contact`, `application`, or omitted       |
+| `message`       | contact            | Plain text, newlines become line breaks    |
+| `pdfBase64`     | application, newhire | Base64 PDF body, no data URI prefix      |
+| `filename`      | application, newhire | Attachment filename                      |
+| `attachments[]` | any                | Optional multi-file form: `{name, base64, contentType}` |
+| `applicantName` | application, newhire | Falls back to `fromName`                 |
+| `fromName`      | contact            |                                            |
+| `fromEmail`     | all                | Becomes the reply-to address               |
+| `phone`         | all                |                                            |
+| `position`      | application, newhire |                                          |
+| `subject`       | contact            |                                            |
+| `date`          | application, newhire |                                          |
+| `ccEmail`       | any                | Copies the submitter                       |
+
+`formType` drives the subject line, so the three form types sort cleanly in the
+inbox. Omitting it keeps the original onboarding wording, which is why
+newhire.html needed no change when contact and application were migrated.
+
+| formType      | Subject line                                       |
+|---------------|----------------------------------------------------|
+| `contact`     | `Website Contact - {subject} - {name}`             |
+| `application` | `Employment Application - {name} - {position}`     |
+| *(omitted)*   | `New Hire Application - {name} - {position}`       |
+
+All user-supplied values are HTML-escaped before going into the mail body.
+
+### Responses
+
+| Status | Body                                                | Meaning                         |
+|--------|-----------------------------------------------------|---------------------------------|
+| 200    | `{"success": true}`                                 | Graph accepted the message      |
+| 400    | `{"success": false, "error": "Missing data"}`        | No attachment and no message    |
+| 500    | `{"success": false, "error": "Authentication failed"}` | Graph token request failed   |
+| 500    | `{"success": false, "error": "Email delivery failed"}`  | Graph rejected the sendMail  |
+
+### Client behaviour on failure
+
+Every form gates its success screen on **both** the HTTP status and the
+`success` flag. A failed send must never look like it worked.
+
+- **Contact form** restores the button and tells the visitor to call 954-678-3934.
+- **Employment application** downloads the completed application as a PDF and
+  tells the applicant to email it to jobapplications@polarisfp.com.
+- **New hire onboarding** downloads the completed packet and does the same.
+
+The two PDF forms hand the user their document precisely so a failed submission
+does not destroy the work they just typed in.
+
+### Testing the endpoint
+
+```bash
+# Should return 400 Missing data
+curl -X POST https://www.polarisfp.com/api/send-newhire-email \
+  -H "Content-Type: application/json" -d '{}'
+
+# Sends a real contact-form email
+curl -X POST https://www.polarisfp.com/api/send-newhire-email \
+  -H "Content-Type: application/json" \
+  -d '{"formType":"contact","fromName":"Test","fromEmail":"you@polarisfp.com","subject":"Test","message":"Test"}'
+```
 
 ## Hosting & Deployment
 
@@ -172,7 +251,26 @@ Website/
 
 ### How to Deploy Updates
 
-From a terminal with Azure CLI and SWA CLI installed:
+Deployment is automatic. Pushing to `master` triggers the GitHub Action in
+`.github/workflows/azure-static-web-apps.yml`, which deploys the site and the
+API together. A run takes about a minute.
+
+```bash
+git push origin master
+gh run watch $(gh run list --limit 1 --json databaseId --jq '.[0].databaseId')
+```
+
+The API is built and deployed from `/api` on every run, so changes to the Azure
+Function ship with the same push. Verify a deploy by requesting a page with a
+cache-busting query string, since the CDN caches aggressively:
+
+```bash
+curl -s "https://www.polarisfp.com/employment.html?cb=$RANDOM" | grep -o jspdf
+```
+
+### Manual deploy (fallback only)
+
+Only needed if the GitHub Action is unavailable. Requires Azure CLI and SWA CLI:
 
 ```bash
 # 1. Copy files to a clean path (avoid OneDrive spaces issue)
@@ -198,22 +296,26 @@ swa deploy /c/temp/polaris-deploy --deployment-token "$DEPLOY_TOKEN" --env produ
 
 ---
 
-## Custom Domain Setup (Not Yet Done)
+## Custom Domain
 
-When ready to connect polarisfp.com:
+Done. Both hostnames serve the site over HTTPS with an Azure-provisioned
+certificate:
 
-1. Run:
+- `https://www.polarisfp.com`
+- `https://polarisfp.com`
+
+The Azure default URL `purple-mud-05a08090f.1.azurestaticapps.net` still
+resolves and is useful for testing a deploy before DNS or CDN caching catches
+up.
+
+To add another hostname later:
+
 ```bash
-az staticwebapp hostname set --name polaris-fire-protection --resource-group polaris-website-rg --hostname www.polarisfp.com
+az staticwebapp hostname set --name polaris-fire-protection --resource-group polaris-website-rg --hostname <hostname>
 ```
 
-2. Go to your domain registrar (wherever polarisfp.com is registered)
-
-3. Add DNS records:
-   - **CNAME** record: `www` pointing to `purple-mud-05a08090f.1.azurestaticapps.net`
-   - For root domain (@), you may need an ALIAS/ANAME record or Azure will provide instructions
-
-4. Azure will auto-provision a free SSL certificate
+Then add a CNAME at the registrar pointing to the Azure default URL. Azure
+auto-provisions the certificate.
 
 ---
 
@@ -221,11 +323,14 @@ az staticwebapp hostname set --name polaris-fire-protection --resource-group pol
 
 1. HR sends new hire the direct link: `https://[your-domain]/newhire.html`
 2. New hire opens link on office iPad connected to WiFi
-3. Fills out all 5 steps (Employee Info, Confidential, Work Rules, Fall Protection, W-4/I-9)
+3. Fills out all 5 steps (Application, Employee Info, Confidential, Work Rules, Fall Protection)
 4. Clicks "Generate PDF & Submit"
-5. PDF auto-downloads/opens on the iPad
-6. HR prints the PDF and files it
+5. The completed packet is emailed to jobapplications@polarisfp.com, with a copy to the new hire
+6. HR prints the PDF from the email and files it
 7. New hire fills out W-4 and I-9 separately (linked fillable PDFs from IRS/USCIS)
+
+If the email fails, the new hire sees an error and the PDF downloads to the iPad
+instead. It then has to be emailed to jobapplications@polarisfp.com by hand.
 
 ### W-4 & I-9 Links
 - **W-4:** https://www.irs.gov/pub/irs-prior/fw4--2025.pdf (fillable)
@@ -266,8 +371,7 @@ All images were downloaded from the existing polarisfp.com website. The logo (ga
 | Library    | Version | CDN URL                                                        | Used On          |
 |------------|---------|----------------------------------------------------------------|------------------|
 | DM Sans    | -       | Google Fonts                                                   | All pages        |
-| EmailJS    | v4      | cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js     | index, contact, employment |
-| jsPDF      | 2.5.2   | cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js       | newhire          |
+| jsPDF      | 2.5.2   | cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js       | employment, newhire |
 
 ---
 
@@ -276,5 +380,6 @@ All images were downloaded from the existing polarisfp.com website. The logo (ga
 - The old website (polarisfp.com) was built on "mywebsitebuilder.com" with an expired SSL certificate
 - The new site is pure static HTML/CSS/JS with no build step or framework
 - The newhire.html page should ideally be hosted on the internal network for maximum security, but can remain on the public URL since it is not linked or indexed
-- EmailJS free tier allows 200 emails per month
-- jsPDF generates PDFs entirely in the browser with no server needed
+- jsPDF generates PDFs entirely in the browser; the Azure Function only relays them
+- Mail runs on Graph app-only client credentials, so there is no user OAuth grant to expire
+- EmailJS was removed on 2026-09-09 after both its templates were deleted from the account, which had been silently dropping every contact message and job application
