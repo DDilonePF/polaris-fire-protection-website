@@ -4,7 +4,8 @@
 
 Static website for Polaris Fire Protection, hosted on Azure Static Web Apps.
 
-- **Live URL:** https://purple-mud-05a08090f.1.azurestaticapps.net
+- **Live URL:** https://www.polarisfp.com (apex https://polarisfp.com also serves)
+- **Azure default URL:** https://purple-mud-05a08090f.1.azurestaticapps.net (still resolves, useful for testing)
 - **Azure Resource Group:** polaris-website-rg
 - **Azure Static Web App Name:** polaris-fire-protection
 - **Azure Region:** East US 2
@@ -19,7 +20,7 @@ Static website for Polaris Fire Protection, hosted on Azure Static Web Apps.
 Website/
   index.html            Home page (hero, services, stats, why us, contact form)
   about.html            About page (company story, capabilities)
-  projects.html         Project gallery (15 photos with lightbox)
+  projects.html         Project gallery (21 photos with lightbox)
   contact.html          Contact form + office locations
   employment.html       Job postings + online application (English/Spanish toggle)
   newhire.html          New hire onboarding portal (5-step wizard, generates PDF)
@@ -39,7 +40,7 @@ Website/
     service-3.jpg       Service & Repairs (technician at fire system)
     service-4.jpg       New Installations (worker on lift)
     service-5.jpg       Inspections & Maintenance (construction inspection)
-    gallery-2 to 16.jpg Project photos
+    gallery-*.jpg       Project photos (34 on disk, 21 referenced by projects.html)
 ```
 
 ---
@@ -99,12 +100,11 @@ Website/
 
 ### Contact (contact.html)
 - Contact form (posts to /api/send-newhire-email, delivered to jobapplications@polarisfp.com)
-- All 5 office locations:
-  - Polaris HQ, Plantation, FL (Alex Romero, aromero@polarisfp.com, 954-678-3934)
-  - West Palm Beach, FL
-  - Tampa Bay / Largo, FL
-  - Corporate Office, Jacksonville, FL (Jim Smith, jsmith@polarisfp.com, 954-678-3934)
-  - Maryland Office, Finksburg, MD
+- All 4 office locations:
+  - Polaris HQ, Ft Lauderdale, FL (Alex Romero, aromero@polarisfp.com, 954-678-3934)
+  - West Palm, FL
+  - Tampa, FL
+  - Mid Atlantic (Baltimore, MD)
 
 ### Employment (employment.html)
 - 6 job postings with color-coded badges (Field/Engineering/Admin)
@@ -350,13 +350,17 @@ instead. It then has to be emailed to jobapplications@polarisfp.com by hand.
 - **Service Area:** Eastern United States
 
 ### Office Locations
-| Office          | Address                                    | Contact                                      |
-|-----------------|--------------------------------------------|----------------------------------------------|
-| HQ (Plantation) | 4009 SW 7th Street, Plantation, FL 33317  | Alex Romero, aromero@polarisfp.com           |
-| West Palm Beach | 1510 Latham Road, Unit, WPB, FL 33409     |                                              |
-| Tampa Bay       | 12467 62nd St, Unit #104, Largo, FL 33773 |                                              |
-| Jacksonville    | Jacksonville, FL (Corporate Office)        | Jim Smith, jsmith@polarisfp.com, 954-678-3934|
-| Maryland        | 1991 Brookshire Court, Finksburg, MD 21048|                                              |
+As listed on contact.html. All four share the phone number 954-678-3934.
+
+| Office                        | Address                                       | Contact                            |
+|-------------------------------|-----------------------------------------------|------------------------------------|
+| Polaris HQ, Ft Lauderdale, FL | 4009 SW 7th Street, Plantation, FL 33317      | Alex Romero, aromero@polarisfp.com |
+| West Palm, FL                 | 1510 Latham Road, Unit 7, West Palm Beach, FL 33409 |                              |
+| Tampa, FL                     | 12467 62nd St, Unit 104, Largo, FL 33773      |                                    |
+| Mid Atlantic                  | Baltimore, Maryland                           |                                    |
+
+The Jacksonville corporate office previously documented here is no longer listed
+on the site.
 
 ---
 
